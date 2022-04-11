@@ -1,6 +1,9 @@
 class Node{
-	constructor(name_, architect_, aspectsStr_, image_){
+	constructor(name_, architect_, year_, continent_,type_ ,aspectsStr_, image_){
 		this.name = name_;
+		this.year = year_;
+		this.continent = continent_;
+		this.type = type_;
 		this.architect = architect_;
 		this.aspectsStr=aspectsStr_;
 		this.aspects;
@@ -18,6 +21,10 @@ class Node{
 
 		//Display settings
 		this.isHidden = false;
+		this.isSortYear = false;
+		this.isSortCont = false;
+		this.isSortType = false;
+
 		this.isHover = false;
 		this.d = 20;
 		this.color = random(50,255);
@@ -46,23 +53,55 @@ class Node{
 	    this.u = this.u.mult(this.damping);
 	    this.u = this.u.add(this.f.mult(this.dt/1));
 	    this.p = this.p.add(this.u.mult(this.dt));
+
 	}
 
 	display(){
 		push();
-		if(this.isHover){
-			this.description();
-			strokeWeight(2);
-			stroke(200,200,50);
+		if(!this.isHidden){
+			if(this.isHover){
+				this.description();
+				strokeWeight(2);
+				stroke(200,200,50);
+			
+			}else{
+				strokeWeight(1);
+				stroke(50,200,200);
+			}
 
-		}else{
-			strokeWeight(1);
-			stroke(50,200,200);
+			//sort Year test
+			push();
+			noStroke();
+			textSize(12);
+			text(this.year, this.p.x- (this.d), this.p.y + 30);
+			text(this.continent, this.p.x- (this.d), this.p.y + 40);
+			text(this.type, this.p.x- (this.d), this.p.y + 50);
+			pop();
+			
+			
+			fill(this.color);
+			circle(this.p.x,this.p.y,this.d);
 		}
-		fill(this.color);
-		circle(this.p.x,this.p.y,this.d);
 		pop();
 	}
+
+	checkEdges(xW, yH, width, height) {
+		if (this.p.x > xW+ width) {
+			this.p.x = xW+ width;
+		  	this.u.x *= -1;
+		} else if (this.p.x < xW) {
+			this.p.x = xW;
+			this.u.x *= -1;
+		}
+	 
+		if (this.p.y > yH + height) {
+			this.p.y = yH + height;
+			this.u.y *= -1;
+		}else if (this.p.y < yH){
+			this.p.y = yH;
+			this.u.y *= -1;
+		}
+	  }
 
 	description(){
 		textSize(12);
@@ -111,6 +150,7 @@ class EdgeCluster{
 		this.color = [random(0,255),random(0,255),random(0,255)];
 	}
 	display(){
+		if(!this.node.isHidden){
 		push();
 		if(this.isHover){
 			stroke(255,255,50);
@@ -121,7 +161,12 @@ class EdgeCluster{
 		}
 		this.edges.forEach(edge => edge.display());
 		pop();
+	}else {
+		stroke(this.color[0],this.color[1],this.color[2]);
+		strokeWeight(0.1);
+		
 	}
+}
 	ApplyForce(){
 		this.edges.forEach(edge => edge.ApplyForce());
 	}
