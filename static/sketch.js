@@ -29,8 +29,8 @@ function initializeCanvas() {
 
 
 function preload() {
-	table = loadTable('assets/SimpleData3.csv', 'csv', 'header');
-	img = loadImage('assets/Kendeda-icon.jpg');
+	table = loadTable('SimpleData3.csv', 'csv', 'header');
+	img = loadImage('Kendeda-icon.jpg');
 }
 
 function setup() {
