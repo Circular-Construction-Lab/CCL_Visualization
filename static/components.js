@@ -8,11 +8,12 @@ class Node{
 		this.aspectsStr=aspectsStr_;
 		this.aspects;
 		this.image = image_;
+		this.descript = "Following the principle of 'High Performance Low Emissions', NEST's HiLo unit realized by ETH Zurich's Block Research Group and the Architecture and Building Systems Group in cooperation with numerous industrial partners, demonstrates how attractive architecture can be when combining energy- and resource-saving construction and operation. The unit brings together innovative planning and design methods for efficient structures in concrete with self-learning and adaptive building technologies.The HiLo Unit features innovations that address challenges of global resource and energy consumption and greenhouse gas emissions, especially perpetuated by the construction industry is responsible for a large share  The integrated design and fabrication approach used to build the two-story unit marks a starting point for the way we may design and build in the future.";
 
 		this.edgeCluster = [];
 		
 		//Moving settings
-		this.p = new p5.Vector(random(0,1000),random(0,500));
+		this.p = new p5.Vector(random(50,windowWidth-250),random(50,windowHeight-50));
 		this.u = new p5.Vector(0,0);
 		this.f = new p5.Vector(0,0);
 		this.dt = 0.5;
@@ -86,6 +87,20 @@ class Node{
 		pop();
 	}
 
+
+	// description(){
+	// 	//div.position(this.p.x, this.p.y);
+	// 	// h1.html(this.name + '<br><br>');
+	// 	// h3.html(this.architect + '<br>' + 'Antarctica<br>2010');
+	// 	//h3.html('location<br>2010');
+	// 	// p.html(this.descript);
+	// 	div.show();
+	// 	// fill(255);
+	// 	// rect(this.p.x - 70,this.p.y- 150,100,100);
+	// 	// stroke(255);
+	// 	// line(this.p.x, this.p.y, this.p.x-20, this.p.y-50)
+	// }
+
 	checkEdges(xW, yH, width, height) {
 		if (this.p.x > xW+ width) {
 			this.p.x = xW+ width;
@@ -118,7 +133,7 @@ class Node{
             text(this.aspectsStr[i], 650, 190+(i*15)); 
         }
         textSize(8);
-        text("Following the principle of 'High Performance – Low Emissions', NEST's HiLo unit realized by ETH Zurich's Block Research Group and the Architecture and Building Systems Group in cooperation with numerous industrial partners, demonstrates how attractive architecture can be when combining energy- and resource-saving construction and operation. The unit brings together innovative planning and design methods for efficient structures in concrete with self-learning and adaptive building technologies.The HiLo Unit features innovations that address challenges of global resource and energy consumption and greenhouse gas emissions, especially perpetuated by the construction industry is responsible for a large share  The integrated design and fabrication approach used to build the two-story unit marks a starting point for the way we may design and build in the future.", 620, 195+(15*this.aspectsStr.length), 160, 500);
+        text(this.descript, 620, 195+(15*this.aspectsStr.length), 160, 500);
 	}
 }
 
@@ -179,7 +194,7 @@ class Aspect{
 		this.isDrag = false;
 
 		//Location
-		this.p = new p5.Vector(random(0,1500),random(0,900));
+		this.p = new p5.Vector(random(100,windowWidth-300),random(100,windowHeight-100));
 
 		//Display settings
 		this.d = 10;

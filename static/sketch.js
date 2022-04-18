@@ -16,21 +16,32 @@ let typeStrs = ['data', 'built project', 'method', 'proposal','installation','la
 let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'cultivation', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
 //git push test2
 
+//pop-up box, change to arrays for mult?? maybe should be class?
+let div;
+let h1;
+let h2;
+let h3;
+let img;
+let p;
+
+
 function initializeCanvas() {
 	// createCanvas
-	canvas = createCanvas(1500, 900);
-	background(200);
+	canvas = createCanvas(windowWidth-200, windowHeight-500);
+	canvas.position(200,0);
+
 
 	// centerCanvas
-	xW = (windowWidth - width) / 2;
-	yH = (windowHeight - height) / 2;
-	canvas.position(xW, yH);
+	// xW = (windowWidth - width) / 2;
+	// yH = (windowHeight - height) / 2;
+	// canvas.position(xW, yH);
 }
 
 
 function preload() {
 	table = loadTable('Database_4_18.csv', 'csv', 'header');
-	img = loadImage('Kendeda-icon.jpg');
+	img = createImg('Kendeda-icon.jpg');
+	img.size(190,160);
 }
 
 function setup() {
@@ -42,13 +53,14 @@ function setup() {
 	initializeSlider();
 	initializeCheckboxCon();
 	initializeCheckboxType();
+	initializePopUp();
 
 }
 
 function draw() {
 	// console.log(windowWidth, windowHeight);
 	// console.log(width, height);
-	canvas = createCanvas(1500, 900);
+	canvas = createCanvas(windowWidth-200, windowHeight);
 	background(0);
 	update();
 	hover();
@@ -90,14 +102,17 @@ function checkEventType() {
 function initializeSlider() {
 	slider = createSlider(1900, 2020, 1900);
 	slider.position(35, 10);
-	slider.style('width', '200px');
+	slider.style('width', '100px');
 	pYearEnd = createP("2020");
-	pYearEnd.position(250, 0);
+	pYearEnd.position(150, 0);
 	pYearStart = createP(1900);
 	pYearStart.position(35, 10);
-	slider.class('slider');
-	pYearEnd.class('slider');
-	pYearStart.class('slider');
+	slider.parent('vizsort');
+	pYearStart.parent('vizsort');
+	pYearEnd.parent('vizsort');
+	// slider.class('slider');
+	// pYearEnd.class('slider');
+	// pYearStart.class('slider');
 
 }
 
@@ -107,7 +122,7 @@ function initializeCheckboxCon() {
 		checkbox.changed(checkEventCon);
 	});
 	checkboxsCon.forEach(function (checkbox, i) {
-		checkbox.position(10, 10 + i * 20);
+		checkbox.position(10, 50 + i * 20);
 	});
 
 }
@@ -118,7 +133,7 @@ function initializeCheckboxType() {
 		checkbox.changed(checkEventType);
 	});
 	checkboxsType.forEach(function (checkbox, i) {
-		checkbox.position(10, 150 + i * 20);
+		checkbox.position(10, 190 + i * 20);
 	});
 
 
@@ -257,4 +272,25 @@ function findAspects(aspectsToFind) {
 	aspectsFound = [];
 	aspectsToFind.forEach(aspect => aspectsFound.push(aspects.find(element => element.name == aspect)));
 	return aspectsFound;
+}
+
+
+function initializePopUp(){
+	let div = createDiv(' ');
+	div.class('popup');
+	let h1 = createElement('h1','initial h1');
+	h1.class('proj');
+	//h2 = createElement('h2','initial h2');
+	let h3 = createElement('h3','initial h3');
+	h3.class('detail');
+	let p = createP('initialized');
+	p.class('descript');
+
+	h1.parent(div);
+	//h2.parent(div);
+	h3.parent(div);
+	img.parent(div);
+	p.parent(div);
+	div.position(windowWidth-280,50);
+	div.hide();
 }

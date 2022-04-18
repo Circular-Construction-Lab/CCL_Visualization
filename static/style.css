@@ -1,24 +1,109 @@
 html, body {
-  background-color:rgb(19, 19, 19);
+  /* background-color:rgb(19, 19, 19); */
   margin: 0;
   padding: 0;
+  height:100%;
+  overflow-y:hidden;
 }
 
 canvas {
   display: block;
+  z-index: -1;
 }
 
 div {
-  margin-top: 50px;
-  margin-left: 20px;
-  /* padding: 20px; */
+  /* margin-top: 50px;
+  margin-left: 20px;  */
+  /* padding: 20px;  */
   color: white;
   font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
 }
-.slider {
-  color: white;
 
+#vizsort {
+  width:200px;
+  height:100%;
+  /* padding: 20px; */
+  background-color: rgb(19, 19, 19);
+  color:white;
 }
+
+
+/* .slider {
+  color: white;
+} */
+
 p {
   font-family: Arial, Helvetica, sans-serif;
+}
+
+
+
+/* POP-UP STYLING */
+.popup {
+  width: 200px;
+  height: 600px;
+  overflow-y: scroll;
+  padding: 20px 25px 20px 20px;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  hyphens: auto;
+  position: absolute;
+  margin-top:50px;
+  margin-left:20px;
+  border: 1px solid red;
+  z-index: 1;
+}
+
+
+.proj {
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 4px;
+}
+
+.arch {
+  font-size: 12px;
+  font-weight:lighter;
+  font-style: italic;
+  color: rgb(190, 190, 190);
+  line-height: 0px;
+}
+
+.detail {
+  font-size: 12px;
+  font-weight:lighter;
+  color: rgb(190, 190, 190);
+  line-height: 12px;
+}
+
+.descript {
+  font-size: 12px;
+  line-height:13px
+  /* font-family: Arial, Helvetica, sans-serif; */
+}
+
+
+
+
+
+/* CUSTOM SCROLLBAR*/
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgb(0,0a,0); 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #a7a7a7; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(194, 194, 194); 
 }
