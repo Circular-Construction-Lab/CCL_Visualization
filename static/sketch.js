@@ -12,13 +12,13 @@ let checkboxsCon = [];
 let checkboxsType = [];
 
 let continentStrs = ['Asia', 'Europe', 'Africa', 'North America', 'South America', 'Oceania'];
-let typeStrs = ['type1', 'type2', 'type3', 'type4'];
-let aspectStrs = ['water', 'site', 'data infrastructure', 'fabrication', 'cultivation', 'people', 'health', 'abioltic material', 'capital', 'carbon'];
+let typeStrs = ['data', 'built project', 'method', 'proposal','installation','landscape architecture project','publication','movement','planning project','material'];
+let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'cultivation', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
 //git push test2
 
 function initializeCanvas() {
 	// createCanvas
-	canvas = createCanvas(1000, 600);
+	canvas = createCanvas(1500, 900);
 	background(200);
 
 	// centerCanvas
@@ -29,7 +29,7 @@ function initializeCanvas() {
 
 
 function preload() {
-	table = loadTable('SimpleData3.csv', 'csv', 'header');
+	table = loadTable('Database_4_18.csv', 'csv', 'header');
 	img = loadImage('Kendeda-icon.jpg');
 }
 
@@ -42,13 +42,14 @@ function setup() {
 	initializeSlider();
 	initializeCheckboxCon();
 	initializeCheckboxType();
-	console.log(nodes);
 
 }
 
 function draw() {
-	canvas = createCanvas(1000, 600);
-	background(240);
+	// console.log(windowWidth, windowHeight);
+	// console.log(width, height);
+	canvas = createCanvas(1500, 900);
+	background(0);
 	update();
 	hover();
 
@@ -94,6 +95,9 @@ function initializeSlider() {
 	pYearEnd.position(250, 0);
 	pYearStart = createP(1900);
 	pYearStart.position(35, 10);
+	slider.class('slider');
+	pYearEnd.class('slider');
+	pYearStart.class('slider');
 
 }
 
@@ -220,16 +224,16 @@ function repel(node) {
 
 function initializeNodes() {
 	let rows = table.getArray();
-	rows.forEach(row => nodes.push(new Node(row[0], row[1], row[2], row[3], row[4], row.splice(5, 7).filter(Boolean))), img);
+	rows.forEach(row => nodes.push(new Node(row[0], row[1], int(row[2]), row[4], row[5], row[6].replaceAll('"').split(', '))), img);
+	
 	nodes.forEach(node => node.aspects = findAspects(node.aspectsStr));
 }
 
 function initializeAspects() {
-	aspectStrs.forEach(aspectStr => aspects.push(new Aspect(aspectStr)));
+		aspectStrs.forEach(aspectStr => aspects.push(new Aspect(aspectStr)));
 }
 
 function initializeEdges() {
-	nodes.forEach(node => edgeClusters.push(new EdgeCluster(node, node.aspects)));
 	nodes.forEach(function (node) {
 		node.edgeCluster = new EdgeCluster(node, node.aspects);
 		edgeClusters.push(node.edgeCluster);

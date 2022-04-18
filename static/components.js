@@ -71,6 +71,7 @@ class Node{
 
 			//sort Year test
 			push();
+			fill(255);
 			noStroke();
 			textSize(12);
 			text(this.year, this.p.x- (this.d), this.p.y + 30);
@@ -178,17 +179,19 @@ class Aspect{
 		this.isDrag = false;
 
 		//Location
-		this.p = new p5.Vector(random(0,1000),random(0,500));
+		this.p = new p5.Vector(random(0,1500),random(0,900));
 
 		//Display settings
 		this.d = 10;
 		this.colorIdle = [50,200,200];
-		this.colorDrag = [255,255,50];
+		this.colorDrag = [255,255,50];	
 		this.strokeWidth = 0.5;	
      	this.strokeColor = (200,200,200);
 	}
 	display(){
 		push();
+		fill(255);
+		noStroke();
 		textSize(12);
 		text(this.name, this.p.x- (this.d), this.p.y + 16);
 		if(this.isDrag){
@@ -197,7 +200,6 @@ class Aspect{
 			fill(this.colorDrag[0],this.colorDrag[1],this.colorDrag[2]);
 		}else{
 			fill(this.colorIdle[0],this.colorIdle[1],this.colorIdle[2]);
-
 		}
 		circle(this.p.x,this.p.y,this.d);
 		pop();
