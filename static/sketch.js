@@ -13,7 +13,7 @@ let checkboxsType = [];
 
 let continentStrs = ['Asia', 'Europe', 'Africa', 'North America', 'South America', 'Oceania'];
 let typeStrs = ['data', 'built project', 'method', 'proposal','installation','landscape architecture project','publication','movement','planning project','material'];
-let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'cultivation', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
+let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
 //git push test2
 
 function initializeCanvas() {
