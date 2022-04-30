@@ -10,14 +10,17 @@ class Node{
 		//Image 
 		this.image = image_;
 
+		this.descript = "Following the principle of 'High Performance Low Emissions', NEST's HiLo unit realized by ETH Zurich's Block Research Group and the Architecture and Building Systems Group in cooperation with numerous industrial partners, demonstrates how attractive architecture can be when combining energy- and resource-saving construction and operation. The unit brings together innovative planning and design methods for efficient structures in concrete with self-learning and adaptive building technologies.The HiLo Unit features innovations that address challenges of global resource and energy consumption and greenhouse gas emissions, especially perpetuated by the construction industry is responsible for a large share  The integrated design and fabrication approach used to build the two-story unit marks a starting point for the way we may design and build in the future.";
+
 		//Icon settings
 		this.typeIcon = typeIcon_;
 		this.iconSize = 20;
 
+
 		this.edgeCluster = [];
 		
 		//Moving settings
-		this.p = new p5.Vector(random(0,1000),random(0,500));
+		this.p = new p5.Vector(random(50,windowWidth-250),random(50,windowHeight-50));
 		this.u = new p5.Vector(0,0);
 		this.f = new p5.Vector(0,0);
 		this.dt = 0.5;
@@ -35,6 +38,8 @@ class Node{
 		this.color = random(50,255);
 		this.strokeWidth = 0.5;	
      	this.strokeColor = (200,200,200);
+
+		this.isExpand = false;
 	}
 
 	AddForceTo(sourceNode_, sourceStrength_){
@@ -58,18 +63,47 @@ class Node{
 	    this.u = this.u.mult(this.damping);
 	    this.u = this.u.add(this.f.mult(this.dt/1));
 	    this.p = this.p.add(this.u.mult(this.dt));
-
 	}
 
 	display(){
+		//expand info box
+		if(this.isExpand){
+
+			let eX = this.p.x - 70;
+			let eY = this.p.y -100;
+			let eWidth = 200;
+			let eHeight = 50;
+			let eColor = color(120,120,120);
+			eColor.setAlpha(200);
+
+			push();
+
+			stroke(200);
+			strokeWeight(1);			
+			fill(eColor);
+			rect(eX,eY,eWidth,eHeight, 3);
+
+			line(this.p.x, this.p.y, this.p.x-20, this.p.y-50);
+
+			noStroke();
+			fill(255);
+			textSize(14);
+			textStyle(BOLD);
+			text(this.name, eX+8, eY+17);
+			textSize(10);
+			textStyle(NORMAL);
+			text('by ' + this.architect, eX+10, eY+30);
+			text(this.type + ', ' + this.year, eX+10, eY + 40);
+			pop();
+		}			
+		
 		push();
 		if(!this.isHidden){
 			if(this.isHover){
-				this.description();
 				strokeWeight(2);
 				stroke(200,200,50);
-			
-			}else{
+			}
+			else{
 				strokeWeight(1);
 				stroke(50,200,200);
 			}
@@ -82,17 +116,30 @@ class Node{
 			fill(255);
 			noStroke();
 			//Text Display
-			textSize(12);
-			text(this.year, this.p.x- (this.d), this.p.y + 30);
-			text(this.continent, this.p.x- (this.d), this.p.y + 40);
-			text(this.typeStr, this.p.x- (this.d), this.p.y + 50);
-			pop();
+// 			textSize(12);
+// 			text(this.year, this.p.x- (this.d), this.p.y + 30);
+// 			text(this.continent, this.p.x- (this.d), this.p.y + 40);
+// 			text(this.typeStr, this.p.x- (this.d), this.p.y + 50);
+ 			pop();
 			
 			//Circle Nodes Display
  			// fill(this.color);
 			// circle(this.p.x,this.p.y,this.d);
+
 		}
 		pop();
+
+		
+	}
+
+
+	toggleExpand(){
+		if(!this.isHidden && this.isExpand==false){
+			this.isExpand = true;
+		}
+		else{
+			this.isExpand = false;
+		}
 	}
 
 
@@ -122,16 +169,14 @@ class Node{
         image(img, 650, 50, 100);
         text(this.name, 650, 150);
         text("architect: " + this.architect, 650,165);
-        //print(this.naspects.length);
         textSize(10);
         for(let i=0;i<this.aspectsStr.length;i++){
             text(this.aspectsStr[i], 650, 190+(i*15)); 
         }
         textSize(8);
-        text("Following the principle of 'High Performance – Low Emissions', NEST's HiLo unit realized by ETH Zurich's Block Research Group and the Architecture and Building Systems Group in cooperation with numerous industrial partners, demonstrates how attractive architecture can be when combining energy- and resource-saving construction and operation. The unit brings together innovative planning and design methods for efficient structures in concrete with self-learning and adaptive building technologies.The HiLo Unit features innovations that address challenges of global resource and energy consumption and greenhouse gas emissions, especially perpetuated by the construction industry is responsible for a large share  The integrated design and fabrication approach used to build the two-story unit marks a starting point for the way we may design and build in the future.", 620, 195+(15*this.aspectsStr.length), 160, 500);
+        text(this.descript, 620, 195+(15*this.aspectsStr.length), 160, 500);
 	}
 }
-
 
 class Edge{
 	constructor(node_, aspect_,){
@@ -160,6 +205,7 @@ class EdgeCluster{
 		//display setting
 		this.isHover = false;
 	}
+
 	display(){
 		if(!this.node.isHidden){
 		push();
@@ -187,7 +233,7 @@ class Aspect{
 		this.isDrag = false;
 
 		//Location
-		this.p = new p5.Vector(random(0,1500),random(0,900));
+		this.p = new p5.Vector(random(100,windowWidth-300),random(100,windowHeight-100));
 
 		//Display settings
 		this.d = 10;
@@ -198,7 +244,21 @@ class Aspect{
 
 		this.edgeColor = [random(0,255),random(0,255),random(0,255)];
 	}
+
 	display(){
+
+		if (this.p.x > windowWidth-200) {
+			this.p.x = windowWidth-200;
+		} else if (this.p.x < 0) {
+			this.p.x = 0;
+		}
+	 
+		if (this.p.y > windowHeight) {
+			this.p.y = windowHeight;
+		}else if (this.p.y < 0){
+			this.p.y = 0;
+		}
+	  
 		push();
 		fill(255);
 		noStroke();
@@ -213,7 +273,50 @@ class Aspect{
 		}
 		circle(this.p.x,this.p.y,this.d);
 		pop();
+		}
 	}
+
+
+
+class Popup{
+	constructor(x_,y_){
+		this.x = x_;
+		this.y = y_;
+		this.div = createDiv(' ');
+		this.pimg = createImg('../assets/Kendeda-icon.jpg','test image');
+		this.h1 = createElement('h1','initial h1');
+		//this.h2 = createElement('h2','initial h2');
+		this.h3 = createElement('h3','initial h3');
+		this.p = createP('initialized');
+	}
+
+	initialStyle(){
+		this.div.class('popup');
+		this.h1.class('proj');
+
+		this.h3.class('detail');
+		this.p.class('descript');
+		this.h1.parent(this.div);
+		this.pimg.parent(this.div);
+		this.h3.parent(this.div);
+
+		this.p.parent(this.div);
+		this.div.position(windowWidth-280,50);
+		this.div.hide();
+	}
+
+	updatePopup(h1_,h3_,cont_,year_,pimg_,p_){
+		this.h1.html(h1_);
+		this.h3.html(h3_ + '<br>' + cont_ + ', ' + year_);
+		this.pimg = pimg_;
+		this.p.html(p_);
+		
+	}
+
+	toggleShow(){
+		this.div.show();
+	}
+
 }
 class Type{
 	constructor(typeStr_, typeIcon_){

@@ -18,21 +18,30 @@ let typeStrs = ['data', 'built project', 'method', 'proposal','installation','la
 let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
 
 
+//pop-up box and array
+let popUp;
+let popUps = [];
+
+
+let img;
+
 function initializeCanvas() {
 	// createCanvas
-	canvas = createCanvas(1500, 900);
-	background(200);
+	canvas = createCanvas(windowWidth-200, windowHeight);
+	canvas.position(200,0);
+
 
 	// centerCanvas
-	xW = (windowWidth - width) / 2;
-	yH = (windowHeight - height) / 2;
-	canvas.position(xW, yH);
+	// xW = (windowWidth - width) / 2;
+	// yH = (windowHeight - height) / 2;
+	// canvas.position(xW, yH);
 }
 
 
 function preload() {
+
 	table = loadTable('assets/Database_4_18.csv', 'csv', 'header');
-	img = loadImage('assets/Kendeda-icon.jpg');
+
 	
 	// load Icons
 	for(i = 0; i < typeStrs.length; i ++){
@@ -53,17 +62,23 @@ function setup() {
 	initializeCheckboxCon();
 	initializeCheckboxType();
 
+
+	popUp = new Popup();
+	popUp.initialStyle();
+
 	checkEventCon();
 	checkEventType();
 	
+
 }
 
 function draw() {
-	// console.log(windowWidth, windowHeight);
-	// console.log(nodes);
-	canvas = createCanvas(1500, 900);
+
+	//canvas = createCanvas(windowWidth-200, windowHeight);
+	windowResized();
+
 	background(0);
-	update();
+	updateNodes();
 	hover();
 
 	displayEdgeClusters();
@@ -133,14 +148,17 @@ function initializeSelectButton(){
 function initializeSlider() {
 	slider = createSlider(1900, 2020, 1900);
 	slider.position(35, 10);
-	slider.style('width', '200px');
+	slider.style('width', '100px');
 	pYearEnd = createP("2020");
-	pYearEnd.position(250, 0);
+	pYearEnd.position(150, 0);
 	pYearStart = createP(1900);
 	pYearStart.position(35, 10);
-	slider.class('slider');
-	pYearEnd.class('slider');
-	pYearStart.class('slider');
+	slider.parent('vizsort');
+	pYearStart.parent('vizsort');
+	pYearEnd.parent('vizsort');
+	// slider.class('slider');
+	// pYearEnd.class('slider');
+	// pYearStart.class('slider');
 
 }
 
@@ -150,7 +168,7 @@ function initializeCheckboxCon() {
 		checkbox.changed(checkEventCon);
 	});
 	checkboxsCon.forEach(function (checkbox, i) {
-		checkbox.position(10, 10 + i * 20);
+		checkbox.position(10, 50 + i * 20);
 	});
 
 }
@@ -161,7 +179,7 @@ function initializeCheckboxType() {
 		checkbox.changed(checkEventType);
 	});
 	checkboxsType.forEach(function (checkbox, i) {
-		checkbox.position(10, 150 + i * 20);
+		checkbox.position(10, 190 + i * 20);
 	});
 
 
@@ -233,6 +251,21 @@ function mousePressed() {
 			aspects[i].isDrag = true;
 		}
 	}
+
+	for (let n = 0; n < nodes.length; n++) {
+		if (overElement(nodes[n].p.x, nodes[n].p.y, nodes[n].d)) {
+			let h1_ = nodes[n].name;
+			let h3_ = nodes[n].architect;
+			let cont_ = nodes[n].continent;
+			let year_ = nodes[n].year;
+			let pimg_ = nodes[n].image;
+			let p_ = nodes[n].descript;
+			popUp.updatePopup(h1_,h3_,cont_,year_,pimg_,p_);
+			popUp.toggleShow();
+			nodes[n].toggleExpand();
+		}
+	}
+
 }
 
 //called when mouse released to set the aspect in new location
@@ -253,9 +286,9 @@ function overElement(x_, y_, d_) {
 	}
 }
 
-function update() {
+function updateNodes() {
 	nodes.forEach(node => node.Move());
-	nodes.forEach(node => node.checkEdges(0, 0, width, height));
+	nodes.forEach(node => node.checkEdges(0, 0, windowWidth, windowHeight));
 	nodes.forEach(node => repel(node));
 	edgeClusters.forEach(edgeCluster => edgeCluster.ApplyForce());
 }
@@ -304,4 +337,8 @@ function findAspects(aspectsToFind) {
 	aspectsFound = [];
 	aspectsToFind.forEach(aspect => aspectsFound.push(aspects.find(element => element.name == aspect)));
 	return aspectsFound;
+}
+
+function windowResized(){
+	resizeCanvas(windowWidth-200, windowHeight);
 }
