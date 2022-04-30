@@ -40,7 +40,7 @@ function initializeCanvas() {
 
 function preload() {
 
-	table = loadTable('Database_4_18.csv', 'csv', 'header');
+	table = loadTable('assets/Database_4_18.csv', 'csv', 'header');
 
 	
 	// load Icons
