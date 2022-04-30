@@ -3,6 +3,7 @@ let nodes = [];
 let aspects = [];
 let edgeClusters = [];
 let nodeEdges = [];
+let icons = [11];
 let slider;
 
 let checkedValue;
@@ -10,11 +11,12 @@ let continentSelected = [];
 let typeSelected = [];
 let checkboxsCon = [];
 let checkboxsType = [];
+let types = [];
 
 let continentStrs = ['Asia', 'Europe', 'Africa', 'North America', 'South America', 'Oceania'];
-let typeStrs = ['data', 'built project', 'method', 'proposal','installation','landscape architecture project','publication','movement','planning project','material'];
-let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'cultivation', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
-//git push test2
+let typeStrs = ['data', 'built project', 'method', 'proposal','installation','landscape architecture project','publication','movement','planning project','material','research'];
+let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
+
 
 //pop-up box and array
 let popUp;
@@ -37,10 +39,17 @@ function initializeCanvas() {
 
 
 function preload() {
+
 	table = loadTable('Database_4_18.csv', 'csv', 'header');
-	// img = createImg('../assets/Kendeda-icon.jpg');
-	// img.size(190,160);
+
+	
+	// load Icons
+	for(i = 0; i < typeStrs.length; i ++){
+		types.push(new Type(typeStrs[i], loadImage('assets/type'+i+'.png')));
+	}
+
 }
+
 
 function setup() {
 	initializeCanvas();
@@ -48,20 +57,26 @@ function setup() {
 	initializeNodes();
 	initializeEdges();
 
+	initializeSelectButton();
 	initializeSlider();
 	initializeCheckboxCon();
 	initializeCheckboxType();
 
+
 	popUp = new Popup();
 	popUp.initialStyle();
+
+	checkEventCon();
+	checkEventType();
+	
 
 }
 
 function draw() {
-	// console.log(windowWidth, windowHeight);
-	// console.log(width, height);
+
 	//canvas = createCanvas(windowWidth-200, windowHeight);
 	windowResized();
+
 	background(0);
 	updateNodes();
 	hover();
@@ -69,8 +84,8 @@ function draw() {
 	displayEdgeClusters();
 	displayAspects();
 	displayNodes();
-
 	displaySliderYear();
+	// displaySelectButton();
 
 	sortYear(slider.value(), 2020);
 	sortContinent(continentSelected);
@@ -100,6 +115,36 @@ function checkEventType() {
 	});
 }
 
+function selectAllCheckboxes(){
+	console.log('select');
+	checkboxsCon.forEach(checkbox => checkbox.checked(true));
+	checkboxsType.forEach(checkbox => checkbox.checked(true));
+	//check check status again
+	checkEventCon()
+	checkEventType();
+}
+
+function clearSelection(){
+	console.log('clear');
+	checkboxsCon.forEach(checkbox => checkbox.checked(false));
+	checkboxsType.forEach(checkbox => checkbox.checked(false));
+	//check check status again
+	checkEventCon()
+	checkEventType();
+	
+}
+
+function initializeSelectButton(){
+	buttonAll = createButton('select all');
+	buttonClear = createButton('clear selection');
+
+	buttonAll.position(30, 440);
+	buttonClear.position(30, 480);
+
+	buttonAll.mousePressed(selectAllCheckboxes);
+	buttonClear.mousePressed(clearSelection);
+}
+
 function initializeSlider() {
 	slider = createSlider(1900, 2020, 1900);
 	slider.position(35, 10);
@@ -118,7 +163,7 @@ function initializeSlider() {
 }
 
 function initializeCheckboxCon() {
-	continentStrs.forEach(con => checkboxsCon.push(createCheckbox(con, false)));
+	continentStrs.forEach(con => checkboxsCon.push(createCheckbox(con, true)));
 	checkboxsCon.forEach(function (checkbox) {
 		checkbox.changed(checkEventCon);
 	});
@@ -129,7 +174,7 @@ function initializeCheckboxCon() {
 }
 
 function initializeCheckboxType() {
-	typeStrs.forEach(type => checkboxsType.push(createCheckbox(type, false)));
+	typeStrs.forEach(type => checkboxsType.push(createCheckbox(type, true)));
 	checkboxsType.forEach(function (checkbox) {
 		checkbox.changed(checkEventType);
 	});
@@ -161,7 +206,7 @@ function sortContinent(continents_) {
 
 function sortType(types_) {
 	nodes.forEach(function (node) {
-		if (!types_.includes(node.type)) {
+		if (!types_.includes(node.typeStr)) {
 			node.isSortType = true;
 		} else {
 			node.isSortType = false;
@@ -255,7 +300,11 @@ function repel(node) {
 
 function initializeNodes() {
 	let rows = table.getArray();
-	rows.forEach(row => nodes.push(new Node(row[0], row[1], int(row[2]), row[4], row[5], row[6].replaceAll('"').split(', '))), img);
+	rows.forEach(function(row) {
+		let iconIndex = typeStrs.findIndex(typeStr => typeStr == row[5]);
+		let thistype = types[iconIndex];
+		nodes.push(new Node(row[0], row[1], int(row[2]), row[4], row[5], row[6].replaceAll('"').split(', '),thistype.typeIcon, img));
+	});
 	
 	nodes.forEach(node => node.aspects = findAspects(node.aspectsStr));
 }
