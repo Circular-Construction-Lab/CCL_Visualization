@@ -1,13 +1,18 @@
 class Node{
-	constructor(name_, architect_, year_, continent_,type_ ,aspectsStr_, image_){
+	constructor(name_, architect_, year_, continent_,typeStr_ ,aspectsStr_,typeIcon_, image_){
 		this.name = name_;
 		this.year = year_;
 		this.continent = continent_;
-		this.type = type_;
+		this.typeStr = typeStr_;
 		this.architect = architect_;
 		this.aspectsStr=aspectsStr_;
 		this.aspects;
+		//Image 
 		this.image = image_;
+
+		//Icon settings
+		this.typeIcon = typeIcon_;
+		this.iconSize = 20;
 
 		this.edgeCluster = [];
 		
@@ -71,20 +76,25 @@ class Node{
 
 			//sort Year test
 			push();
+			//Icon Display
+			image(this.typeIcon,this.p.x-(this.iconSize/2),this.p.y-(this.iconSize/2),this.iconSize,this.iconSize);
+
 			fill(255);
 			noStroke();
+			//Text Display
 			textSize(12);
 			text(this.year, this.p.x- (this.d), this.p.y + 30);
 			text(this.continent, this.p.x- (this.d), this.p.y + 40);
-			text(this.type, this.p.x- (this.d), this.p.y + 50);
+			text(this.typeStr, this.p.x- (this.d), this.p.y + 50);
 			pop();
 			
-			
-			fill(this.color);
-			circle(this.p.x,this.p.y,this.d);
+			//Circle Nodes Display
+ 			// fill(this.color);
+			// circle(this.p.x,this.p.y,this.d);
 		}
 		pop();
 	}
+
 
 	checkEdges(xW, yH, width, height) {
 		if (this.p.x > xW+ width) {
@@ -136,6 +146,7 @@ class Edge{
 	}
 
 	display(){
+		stroke(this.aspect.edgeColor[0],this.aspect.edgeColor[1],this.aspect.edgeColor[2]);
 		line(this.node.p.x,this.node.p.y, this.aspect.p.x,this.aspect.p.y);
 	}
 }
@@ -148,7 +159,6 @@ class EdgeCluster{
 		this.aspects.forEach(element => this.edges.push(new Edge(this.node, element)));
 		//display setting
 		this.isHover = false;
-		this.color = [random(0,255),random(0,255),random(0,255)];
 	}
 	display(){
 		if(!this.node.isHidden){
@@ -157,13 +167,11 @@ class EdgeCluster{
 			stroke(255,255,50);
 			strokeWeight(2);
 		}else{
-			stroke(this.color[0],this.color[1],this.color[2]);
 			strokeWeight(0.5);
 		}
 		this.edges.forEach(edge => edge.display());
 		pop();
 	}else {
-		stroke(this.color[0],this.color[1],this.color[2]);
 		strokeWeight(0.1);
 		
 	}
@@ -187,6 +195,8 @@ class Aspect{
 		this.colorDrag = [255,255,50];	
 		this.strokeWidth = 0.5;	
      	this.strokeColor = (200,200,200);
+
+		this.edgeColor = [random(0,255),random(0,255),random(0,255)];
 	}
 	display(){
 		push();
@@ -203,5 +213,11 @@ class Aspect{
 		}
 		circle(this.p.x,this.p.y,this.d);
 		pop();
+	}
+}
+class Type{
+	constructor(typeStr_, typeIcon_){
+		this.typeStr = typeStr_;
+		this.typeIcon = typeIcon_;
 	}
 }
