@@ -16,18 +16,16 @@ let typeStrs = ['data', 'built project', 'method', 'proposal','installation','la
 let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'cultivation', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
 //git push test2
 
-//pop-up box, change to arrays for mult?? maybe should be class?
-let div;
-let h1;
-let h2;
-let h3;
-let img;
-let p;
+//pop-up box and array
+let popUp;
+let popUps = [];
 
+
+let img;
 
 function initializeCanvas() {
 	// createCanvas
-	canvas = createCanvas(windowWidth-200, windowHeight-500);
+	canvas = createCanvas(windowWidth-200, windowHeight);
 	canvas.position(200,0);
 
 
@@ -40,8 +38,8 @@ function initializeCanvas() {
 
 function preload() {
 	table = loadTable('Database_4_18.csv', 'csv', 'header');
-	img = createImg('Kendeda-icon.jpg');
-	img.size(190,160);
+	// img = createImg('../assets/Kendeda-icon.jpg');
+	// img.size(190,160);
 }
 
 function setup() {
@@ -53,16 +51,19 @@ function setup() {
 	initializeSlider();
 	initializeCheckboxCon();
 	initializeCheckboxType();
-	initializePopUp();
+
+	popUp = new Popup();
+	popUp.initialStyle();
 
 }
 
 function draw() {
 	// console.log(windowWidth, windowHeight);
 	// console.log(width, height);
-	canvas = createCanvas(windowWidth-200, windowHeight);
+	//canvas = createCanvas(windowWidth-200, windowHeight);
+	windowResized();
 	background(0);
-	update();
+	updateNodes();
 	hover();
 
 	displayEdgeClusters();
@@ -205,6 +206,21 @@ function mousePressed() {
 			aspects[i].isDrag = true;
 		}
 	}
+
+	for (let n = 0; n < nodes.length; n++) {
+		if (overElement(nodes[n].p.x, nodes[n].p.y, nodes[n].d)) {
+			let h1_ = nodes[n].name;
+			let h3_ = nodes[n].architect;
+			let cont_ = nodes[n].continent;
+			let year_ = nodes[n].year;
+			let pimg_ = nodes[n].image;
+			let p_ = nodes[n].descript;
+			popUp.updatePopup(h1_,h3_,cont_,year_,pimg_,p_);
+			popUp.toggleShow();
+			nodes[n].toggleExpand();
+		}
+	}
+
 }
 
 //called when mouse released to set the aspect in new location
@@ -225,9 +241,9 @@ function overElement(x_, y_, d_) {
 	}
 }
 
-function update() {
+function updateNodes() {
 	nodes.forEach(node => node.Move());
-	nodes.forEach(node => node.checkEdges(0, 0, width, height));
+	nodes.forEach(node => node.checkEdges(0, 0, windowWidth, windowHeight));
 	nodes.forEach(node => repel(node));
 	edgeClusters.forEach(edgeCluster => edgeCluster.ApplyForce());
 }
@@ -274,23 +290,6 @@ function findAspects(aspectsToFind) {
 	return aspectsFound;
 }
 
-
-function initializePopUp(){
-	let div = createDiv(' ');
-	div.class('popup');
-	let h1 = createElement('h1','initial h1');
-	h1.class('proj');
-	//h2 = createElement('h2','initial h2');
-	let h3 = createElement('h3','initial h3');
-	h3.class('detail');
-	let p = createP('initialized');
-	p.class('descript');
-
-	h1.parent(div);
-	//h2.parent(div);
-	h3.parent(div);
-	img.parent(div);
-	p.parent(div);
-	div.position(windowWidth-280,50);
-	div.hide();
+function windowResized(){
+	resizeCanvas(windowWidth-200, windowHeight);
 }
