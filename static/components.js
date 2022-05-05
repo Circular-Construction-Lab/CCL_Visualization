@@ -1,16 +1,20 @@
 class Node{
-	constructor(name_, architect_, year_, continent_,typeStr_ ,aspectsStr_,typeIcon_, image_){
+	constructor(name_, architect_, year_, location_, continent_,typeStr_ ,aspectsStr_, imgUrl_, sourceUrl_, descript_, typeIcon_, image_){
 		this.name = name_;
 		this.year = year_;
+		this.location = location_;
 		this.continent = continent_;
 		this.typeStr = typeStr_;
 		this.architect = architect_;
 		this.aspectsStr=aspectsStr_;
+		this.imgUrl = imgUrl_;
+		this.sourceUrl = sourceUrl_;
+		this.descript = descript_;
 		this.aspects;
 		//Image 
 		this.image = image_;
 
-		this.descript = "Following the principle of 'High Performance Low Emissions', NEST's HiLo unit realized by ETH Zurich's Block Research Group and the Architecture and Building Systems Group in cooperation with numerous industrial partners, demonstrates how attractive architecture can be when combining energy- and resource-saving construction and operation. The unit brings together innovative planning and design methods for efficient structures in concrete with self-learning and adaptive building technologies.The HiLo Unit features innovations that address challenges of global resource and energy consumption and greenhouse gas emissions, especially perpetuated by the construction industry is responsible for a large share  The integrated design and fabrication approach used to build the two-story unit marks a starting point for the way we may design and build in the future.";
+		// this.descript = "Following the principle of 'High Performance Low Emissions', NEST's HiLo unit realized by ETH Zurich's Block Research Group and the Architecture and Building Systems Group in cooperation with numerous industrial partners, demonstrates how attractive architecture can be when combining energy- and resource-saving construction and operation. The unit brings together innovative planning and design methods for efficient structures in concrete with self-learning and adaptive building technologies.The HiLo Unit features innovations that address challenges of global resource and energy consumption and greenhouse gas emissions, especially perpetuated by the construction industry is responsible for a large share  The integrated design and fabrication approach used to build the two-story unit marks a starting point for the way we may design and build in the future.";
 
 		//Icon settings
 		this.typeIcon = typeIcon_;
@@ -110,10 +114,12 @@ class Node{
 
 			//sort Year test
 			push();
+
 			//Icon Display
 			image(this.typeIcon,this.p.x-(this.iconSize/2),this.p.y-(this.iconSize/2),this.iconSize,this.iconSize);
 
 			fill(255);
+
 			noStroke();
 			//Text Display
 // 			textSize(12);
@@ -122,9 +128,8 @@ class Node{
 // 			text(this.typeStr, this.p.x- (this.d), this.p.y + 50);
  			pop();
 			
-			//Circle Nodes Display
- 			// fill(this.color);
 			// circle(this.p.x,this.p.y,this.d);
+ 		
 
 		}
 		pop();

@@ -13,7 +13,7 @@ let checkboxsCon = [];
 let checkboxsType = [];
 let types = [];
 
-let continentStrs = ['Asia', 'Europe', 'Africa', 'North America', 'South America', 'Oceania'];
+let continentStrs = ['asia', 'europe', 'africa', 'north america', 'south america', 'oceania'];
 let typeStrs = ['data', 'built project', 'method', 'proposal','installation','landscape architecture project','publication','movement','planning project','material','research'];
 let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
 
@@ -40,10 +40,11 @@ function initializeCanvas() {
 
 function preload() {
 
-	table = loadTable('assets/Database_4_18.csv', 'csv', 'header');
+	table = loadTable('assets/Database_5_05.csv', 'csv', 'header');
 
 	
 	// load Icons
+	
 	for(i = 0; i < typeStrs.length; i ++){
 		types.push(new Type(typeStrs[i], loadImage('assets/type'+i+'.png')));
 	}
@@ -300,13 +301,32 @@ function repel(node) {
 
 function initializeNodes() {
 	let rows = table.getArray();
+
 	rows.forEach(function(row) {
-		let iconIndex = typeStrs.findIndex(typeStr => typeStr == row[5]);
+
+
+		let name_ = row[0].replaceAll('"', '');
+		let architect_ = row[1].replaceAll('"','');
+		let year_ = row[2].replaceAll('"','');
+		let location_ = row[3].replaceAll('"','');
+		let continent_ = row[4].replaceAll('"','');
+		let typeStr_ = row[5].replaceAll('"','');
+		let aspectsStr_ = row[6].replaceAll('"','').split(', ');
+		let imgUrl_ = row[7].replaceAll('"','');
+		let sourceUrl_ = row[8].replaceAll('"','');
+		let descript_ = row[9].replaceAll('"','');
+
+		let iconIndex = typeStrs.findIndex(typeStr => typeStr == typeStr_);
 		let thistype = types[iconIndex];
-		nodes.push(new Node(row[0], row[1], int(row[2]), row[4], row[5], row[6].replaceAll('"').split(', '),thistype.typeIcon, img));
+	
+
+		// nodes.push(new Node(row[0], row[1], int(row[2]), row[3], row[4], row[5], row[6].replaceAll('"').split(', '),row[7],row[8],row[9],thistype.typeIcon, img));
+		nodes.push(new Node(name_, architect_,year_,location_,continent_, typeStr_, aspectsStr_,imgUrl_, sourceUrl_, descript_,thistype.typeIcon, img));
+		
 	});
 	
 	nodes.forEach(node => node.aspects = findAspects(node.aspectsStr));
+	
 }
 
 function initializeAspects() {
