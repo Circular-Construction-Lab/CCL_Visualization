@@ -14,7 +14,7 @@ let checkboxsType = [];
 let types = [];
 
 let continentStrs = ['asia', 'europe', 'africa', 'north america', 'south america', 'oceania'];
-let typeStrs = ['data', 'built project', 'method', 'proposal','installation','landscape architecture project','publication','movement','planning project','material','research'];
+let typeStrs = ['data', 'built project', 'method', 'proposal','publication','movement','planning project','material','research'];
 let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
 
 
@@ -22,8 +22,6 @@ let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'h
 let popUp;
 let popUps = [];
 
-
-let img;
 
 function initializeCanvas() {
 	// createCanvas
@@ -46,7 +44,7 @@ function preload() {
 	// load Icons
 	
 	for(i = 0; i < typeStrs.length; i ++){
-		types.push(new Type(typeStrs[i], loadImage('assets/type'+i+'.png')));
+		types.push(new Type(typeStrs[i], loadImage('assets/icon2/type'+i+'.png')));
 	}
 
 }
@@ -242,6 +240,8 @@ function hover() {
 			nodes[i].edgeCluster.isHover = false;
 		}
 	}
+
+
 }
 
 //called when mouse is pressed to drag an aspect
@@ -257,11 +257,11 @@ function mousePressed() {
 		if (overElement(nodes[n].p.x, nodes[n].p.y, nodes[n].d)) {
 			let h1_ = nodes[n].name;
 			let h3_ = nodes[n].architect;
-			let cont_ = nodes[n].continent;
+			let loc_ = nodes[n].location;
 			let year_ = nodes[n].year;
-			let pimg_ = nodes[n].image;
+			let pimg_ = nodes[n].imgUrl;
 			let p_ = nodes[n].descript;
-			popUp.updatePopup(h1_,h3_,cont_,year_,pimg_,p_);
+			popUp.updatePopup(h1_,h3_,loc_,year_,pimg_,p_);
 			popUp.toggleShow();
 			nodes[n].toggleExpand();
 		}
@@ -312,16 +312,16 @@ function initializeNodes() {
 		let continent_ = row[4].replaceAll('"','');
 		let typeStr_ = row[5].replaceAll('"','');
 		let aspectsStr_ = row[6].replaceAll('"','').split(', ');
-		let imgUrl_ = row[7].replaceAll('"','');
-		let sourceUrl_ = row[8].replaceAll('"','');
-		let descript_ = row[9].replaceAll('"','');
+		let imgUrl_ = row[7].slice(1,-1);
+		let sourceUrl_ = row[8].slice(1,-1);
+		let descript_ = row[9].slice(1,-1);
 
 		let iconIndex = typeStrs.findIndex(typeStr => typeStr == typeStr_);
 		let thistype = types[iconIndex];
 	
 
 		// nodes.push(new Node(row[0], row[1], int(row[2]), row[3], row[4], row[5], row[6].replaceAll('"').split(', '),row[7],row[8],row[9],thistype.typeIcon, img));
-		nodes.push(new Node(name_, architect_,year_,location_,continent_, typeStr_, aspectsStr_,imgUrl_, sourceUrl_, descript_,thistype.typeIcon, img));
+		nodes.push(new Node(name_, architect_,year_,location_,continent_, typeStr_, aspectsStr_,imgUrl_, sourceUrl_, descript_,thistype.typeIcon));
 		
 	});
 	
@@ -330,7 +330,26 @@ function initializeNodes() {
 }
 
 function initializeAspects() {
-		aspectStrs.forEach(aspectStr => aspects.push(new Aspect(aspectStr)));
+
+	// let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
+
+		let colorIds = [];
+		colorIds.push([18,14,177]);
+		colorIds.push([69,168,81]);
+		colorIds.push([219,143,34]);
+		colorIds.push([205,61,213]);
+		colorIds.push([79,43,157]);
+		colorIds.push([255,83,59]);
+		colorIds.push([15,179,146]);
+		colorIds.push([246,13,71]);
+		colorIds.push([231,73,145]);
+		colorIds.push([232,91,22]);
+
+		for(let a =0;a<aspectStrs.length;a++){
+			aspects.push(new Aspect(aspectStrs[a],colorIds[a]));
+		}
+
+		// aspectStrs.forEach(aspectStr => aspects.push(new Aspect(aspectStr,)));
 }
 
 function initializeEdges() {

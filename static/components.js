@@ -1,5 +1,5 @@
 class Node{
-	constructor(name_, architect_, year_, location_, continent_,typeStr_ ,aspectsStr_, imgUrl_, sourceUrl_, descript_, typeIcon_, image_){
+	constructor(name_, architect_, year_, location_, continent_,typeStr_ ,aspectsStr_, imgUrl_, sourceUrl_, descript_, typeIcon_){
 		this.name = name_;
 		this.year = year_;
 		this.location = location_;
@@ -11,8 +11,7 @@ class Node{
 		this.sourceUrl = sourceUrl_;
 		this.descript = descript_;
 		this.aspects;
-		//Image 
-		this.image = image_;
+	
 
 		// this.descript = "Following the principle of 'High Performance Low Emissions', NEST's HiLo unit realized by ETH Zurich's Block Research Group and the Architecture and Building Systems Group in cooperation with numerous industrial partners, demonstrates how attractive architecture can be when combining energy- and resource-saving construction and operation. The unit brings together innovative planning and design methods for efficient structures in concrete with self-learning and adaptive building technologies.The HiLo Unit features innovations that address challenges of global resource and energy consumption and greenhouse gas emissions, especially perpetuated by the construction industry is responsible for a large share  The integrated design and fabrication approach used to build the two-story unit marks a starting point for the way we may design and build in the future.";
 
@@ -71,6 +70,10 @@ class Node{
 
 	display(){
 		//expand info box
+		if(this.isHidden){
+			this.isExpand = false;
+		}
+
 		if(this.isExpand){
 
 			let eX = this.p.x - 70;
@@ -106,6 +109,11 @@ class Node{
 			if(this.isHover){
 				strokeWeight(2);
 				stroke(200,200,50);
+				push();
+				noStroke();
+				fill(255,255,255);
+				text(this.name, this.p.x -30, this.p.y -20);
+				pop();
 			}
 			else{
 				strokeWeight(1);
@@ -119,17 +127,11 @@ class Node{
 			image(this.typeIcon,this.p.x-(this.iconSize/2),this.p.y-(this.iconSize/2),this.iconSize,this.iconSize);
 
 			fill(255);
-
 			noStroke();
-			//Text Display
-// 			textSize(12);
-// 			text(this.year, this.p.x- (this.d), this.p.y + 30);
-// 			text(this.continent, this.p.x- (this.d), this.p.y + 40);
-// 			text(this.typeStr, this.p.x- (this.d), this.p.y + 50);
  			pop();
 			
+			//Circle display
 			// circle(this.p.x,this.p.y,this.d);
- 		
 
 		}
 		pop();
@@ -216,7 +218,7 @@ class EdgeCluster{
 		push();
 		if(this.isHover){
 			stroke(255,255,50);
-			strokeWeight(2);
+			strokeWeight(3);
 		}else{
 			strokeWeight(0.5);
 		}
@@ -226,6 +228,7 @@ class EdgeCluster{
 		strokeWeight(0.1);
 		
 	}
+
 }
 	ApplyForce(){
 		this.edges.forEach(edge => edge.ApplyForce());
@@ -233,7 +236,7 @@ class EdgeCluster{
 }
 
 class Aspect{
-	constructor(name_){
+	constructor(name_,colorIdle_){
 		this.name = name_;
 		this.isDrag = false;
 
@@ -242,12 +245,13 @@ class Aspect{
 
 		//Display settings
 		this.d = 10;
-		this.colorIdle = [50,200,200];
+		this.colorIdle = colorIdle_;
+		//this.colorIdle = [random(0,255),random(0,255),random(0,255)];
 		this.colorDrag = [255,255,50];	
 		this.strokeWidth = 0.5;	
      	this.strokeColor = (200,200,200);
 
-		this.edgeColor = [random(0,255),random(0,255),random(0,255)];
+		this.edgeColor = this.colorIdle;
 	}
 
 	display(){
@@ -310,12 +314,12 @@ class Popup{
 		this.div.hide();
 	}
 
-	updatePopup(h1_,h3_,cont_,year_,pimg_,p_){
+	updatePopup(h1_,h3_,loc_,year_,pimg_,p_){
 		this.h1.html(h1_);
-		this.h3.html(h3_ + '<br>' + cont_ + ', ' + year_);
-		this.pimg = pimg_;
+		this.h3.html(h3_ + '<br>' + loc_ + '<br>' + year_);
+		this.pimg = createImg(pimg_,'test');
 		this.p.html(p_);
-		
+		print(pimg_);
 	}
 
 	toggleShow(){
@@ -323,6 +327,7 @@ class Popup{
 	}
 
 }
+
 class Type{
 	constructor(typeStr_, typeIcon_){
 		this.typeStr = typeStr_;
