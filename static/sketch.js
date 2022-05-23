@@ -1,4 +1,6 @@
 let canvas;
+let canvasXW;
+let canvasYH;
 let nodes = [];
 let aspects = [];
 let edgeClusters = [];
@@ -37,7 +39,9 @@ var range = document.querySelector(".slider > .range");
 
 function initializeCanvas() {
 	// createCanvas
+
 	canvas = createCanvas(windowWidth-200, windowHeight);
+	canvasPadding = 150;
 	canvas.position(200,0);
 
 
@@ -62,6 +66,7 @@ function preload() {
 
 
 function setup() {
+
 	initializeCanvas();
 	initializeAspects();
 	initializeNodes();
@@ -371,15 +376,19 @@ function overElement(x_, y_, d_) {
 }
 
 function updateNodes() {
+	//enable movements
 	nodes.forEach(node => node.Move());
-	nodes.forEach(node => node.checkEdges(0, 0, windowWidth, windowHeight));
+	//boundary
+	nodes.forEach(node => node.checkEdges(canvasPadding, canvasPadding, windowWidth, windowHeight));
+	//repel from other nodes
 	nodes.forEach(node => repel(node));
 	edgeClusters.forEach(edgeCluster => edgeCluster.ApplyForce());
 }
 
 function repel(node) {
 	let nodesRepelFrom = nodes.filter(element => element != node);
-	nodesRepelFrom.forEach(element => node.AddForceTo(element, -10));
+	//here Control repel force
+	nodesRepelFrom.forEach(element => node.AddForceTo(element, -20));
 }
 
 function initializeNodes() {
@@ -394,7 +403,19 @@ function initializeNodes() {
 }
 
 function initializeAspects() {
-		aspectStrs.forEach(aspectStr => aspects.push(new Aspect(aspectStr)));
+	
+	//calculate aspect locations
+	n = aspectStrs.length;
+	let v = createVector(1, 0);
+	let points = [v.copy()];
+	for(let p = 1; p < n; ++p) {
+	  points.push(v.rotate(2*PI/n).copy());
+	}
+
+	aspectStrs.forEach(aspectStr => aspects.push(new Aspect(aspectStr)));
+	for(i = 0; i < aspects.length; i++){
+		aspects[i].p = new p5.Vector(width/2 + points[i].x * (height-canvasPadding)/2,height/2 - points[i].y * (height-canvasPadding)/2);
+	}
 }
 
 function initializeEdges() {
@@ -413,7 +434,9 @@ function displayNodes() {
 	nodes.forEach(node => node.display());
 }
 
-function displayAspects() {
+function displayAspects() {    
+
+	
 	aspects.forEach(aspect => aspect.display());
 }
 
