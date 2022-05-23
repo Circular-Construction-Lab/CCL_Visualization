@@ -13,6 +13,7 @@ let checkboxsCon = [];
 let checkboxsType = [];
 let types = [];
 
+
 let continentStrs = ['Asia', 'Europe', 'Africa', 'North America', 'South America', 'Oceania'];
 let typeStrs = ['data', 'built project', 'method', 'proposal','installation','landscape architecture project','publication','movement','planning project','material','research'];
 let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
@@ -24,6 +25,15 @@ let popUps = [];
 
 
 let img;
+
+// Slider with 2 Handles
+var inputLeft = document.getElementById("input-left");
+var inputRight = document.getElementById("input-right");
+
+var thumbLeft = document.querySelector(".slider > .thumb.left");
+var thumbRight = document.querySelector(".slider > .thumb.right");
+var range = document.querySelector(".slider > .range");
+
 
 function initializeCanvas() {
 	// createCanvas
@@ -72,6 +82,7 @@ function setup() {
 
 }
 
+
 function draw() {
 
 	//canvas = createCanvas(windowWidth-200, windowHeight);
@@ -85,9 +96,8 @@ function draw() {
 	displayAspects();
 	displayNodes();
 	displaySliderYear();
-	// displaySelectButton();
 
-	sortYear(slider.value(), 2020);
+	sortYear(inputLeft.value, inputRight.value);
 	sortContinent(continentSelected);
 	sortType(typeSelected);
 	checkHidden();
@@ -138,29 +148,100 @@ function initializeSelectButton(){
 	buttonAll = createButton('select all');
 	buttonClear = createButton('clear selection');
 
-	buttonAll.position(30, 440);
-	buttonClear.position(30, 480);
+	buttonAll.position(20, 450);
+	buttonClear.position(20, 480);
 
 	buttonAll.mousePressed(selectAllCheckboxes);
 	buttonClear.mousePressed(clearSelection);
 }
 
 function initializeSlider() {
-	slider = createSlider(1900, 2020, 1900);
-	slider.position(35, 10);
-	slider.style('width', '100px');
-	pYearEnd = createP("2020");
-	pYearEnd.position(150, 0);
+	
+	setLeftValue();
+	setRightValue();
+
 	pYearStart = createP(1900);
-	pYearStart.position(35, 10);
-	slider.parent('vizsort');
+	pYearStart.position(10, 20);
 	pYearStart.parent('vizsort');
+
+	
+	pYearEnd = createP(2020);
+	pYearEnd.position(160, 20);
 	pYearEnd.parent('vizsort');
-	// slider.class('slider');
-	// pYearEnd.class('slider');
-	// pYearStart.class('slider');
+	
+	// //P5 Solution
+	// slider = createSlider(1900, 2020, 1900);
+	// slider.position(35, 10);
+	// slider.style('width', '100px');
+	// pYearEnd = createP("2020");
+	// pYearEnd.position(150, 0);
+	// pYearStart = createP(1900);
+	// pYearStart.position(35, 10);
+	// slider.parent('vizsort');
+	// pYearStart.parent('vizsort');
+	// pYearEnd.parent('vizsort');
+	// // slider.class('slider');
+	// // pYearEnd.class('slider');
+	// // pYearStart.class('slider');
 
 }
+
+
+function setLeftValue() {
+	var _this = inputLeft,
+		min = parseInt(_this.min),
+		max = parseInt(_this.max);
+
+	_this.value = Math.min(parseInt(_this.value), parseInt(inputRight.value) - 1);
+
+	var percent = ((_this.value - min) / (max - min)) * 100;
+
+	thumbLeft.style.left = percent + "%";
+	range.style.left = percent + "%";
+}
+
+function setRightValue() {
+	var _this = inputRight,
+		min = parseInt(_this.min),
+		max = parseInt(_this.max);
+
+	_this.value = Math.max(parseInt(_this.value), parseInt(inputLeft.value) + 1);
+
+	var percent = ((_this.value - min) / (max - min)) * 100;
+
+	thumbRight.style.right = (100 - percent) + "%";
+	range.style.right = (100 - percent) + "%";
+}
+
+inputLeft.addEventListener("input", setLeftValue);
+inputRight.addEventListener("input", setRightValue);
+
+inputLeft.addEventListener("mouseover", function() {
+	thumbLeft.classList.add("hover");
+});
+inputLeft.addEventListener("mouseout", function() {
+	thumbLeft.classList.remove("hover");
+});
+inputLeft.addEventListener("mousedown", function() {
+	thumbLeft.classList.add("active");
+});
+inputLeft.addEventListener("mouseup", function() {
+	thumbLeft.classList.remove("active");
+});
+
+inputRight.addEventListener("mouseover", function() {
+	thumbRight.classList.add("hover");
+});
+inputRight.addEventListener("mouseout", function() {
+	thumbRight.classList.remove("hover");
+});
+inputRight.addEventListener("mousedown", function() {
+	thumbRight.classList.add("active");
+});
+inputRight.addEventListener("mouseup", function() {
+	thumbRight.classList.remove("active");
+});
+
 
 function initializeCheckboxCon() {
 	continentStrs.forEach(con => checkboxsCon.push(createCheckbox(con, true)));
@@ -168,7 +249,7 @@ function initializeCheckboxCon() {
 		checkbox.changed(checkEventCon);
 	});
 	checkboxsCon.forEach(function (checkbox, i) {
-		checkbox.position(10, 50 + i * 20);
+		checkbox.position(10, 70 + i * 20);
 	});
 
 }
@@ -179,7 +260,7 @@ function initializeCheckboxType() {
 		checkbox.changed(checkEventType);
 	});
 	checkboxsType.forEach(function (checkbox, i) {
-		checkbox.position(10, 190 + i * 20);
+		checkbox.position(10, 210 + i * 20);
 	});
 
 
@@ -216,7 +297,10 @@ function sortType(types_) {
 
 
 function displaySliderYear() {
-	pYearStart.html(slider.value());
+	pYearStart.html(inputLeft.value);
+	pYearEnd.html(inputRight.value);
+
+	// pYearStart.html(slider.value());
 }
 
 function checkHidden() {
