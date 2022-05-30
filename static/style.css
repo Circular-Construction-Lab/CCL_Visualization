@@ -24,6 +24,9 @@ div {
   /* padding: 20px; */
   background-color: rgb(19, 19, 19);
   color:whitesmoke;
+  /* set non-selectable */
+  -webkit-user-select:none;-moz-user-select:-moz-none;
+    -ms-user-select:none;user-select:none
 }
 
 
@@ -185,3 +188,27 @@ input[type=range]::-webkit-slider-thumb {
 	-webkit-appearance: none;
 }
 
+
+.checkmarkCon {
+  position: relative;
+  top: 2vh;
+  left: 5%;
+  height: 25px;
+  width: 200px;
+}
+.checkmarkType {
+  position: relative;
+  top: 5vh;
+  left: 5%;
+  height: 25px;
+  width: 200px;
+}
+
+.button {
+  position: relative;
+  top: 90%;
+  left: 5%;
+  height: 25px;
+  margin: 3px;
+  width: 180px;
+}

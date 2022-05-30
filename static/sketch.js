@@ -41,7 +41,7 @@ function initializeCanvas() {
 	// createCanvas
 
 	canvas = createCanvas(windowWidth-200, windowHeight);
-	canvasPadding = 0;
+	canvasPadding = windowWidth/20;
 	canvas.position(200,0);
 
 
@@ -96,6 +96,7 @@ function draw() {
 	background(0);
 	updateNodes();
 	hover();
+	noStack();
 
 	displayEdgeClusters();
 	displayAspects();
@@ -107,6 +108,19 @@ function draw() {
 	sortType(typeSelected);
 	checkHidden();
 
+}
+
+function noStack(){
+	aspects.forEach(function(aspect0){
+		aspects.forEach(function(aspect1){
+			if(aspect0 != aspect1){
+				let dist = aspect0.p.dist(aspect1.p);
+				if(dist < 10){
+					aspect0.p = aspect0.p.add(new p5.Vector(random(-aspect0.d/2,aspect0.d/2),random(-aspect0.d/2,aspect0.d/2)));
+				}
+			}
+		})
+	});
 }
 function checkEventCon() {
 	checkboxsCon.forEach(function (checkbox) {
@@ -153,8 +167,10 @@ function initializeSelectButton(){
 	buttonAll = createButton('select all');
 	buttonClear = createButton('clear selection');
 
-	buttonAll.position(20, 450);
-	buttonClear.position(20, 480);
+	buttonAll.parent('vizsort');
+	buttonClear.parent('vizsort');
+	buttonAll.class('button');
+	buttonClear.class('button');
 
 	buttonAll.mousePressed(selectAllCheckboxes);
 	buttonClear.mousePressed(clearSelection);
@@ -166,12 +182,12 @@ function initializeSlider() {
 	setRightValue();
 
 	pYearStart = createP(1900);
-	pYearStart.position(10, 20);
+	pYearStart.position(15, 30);
 	pYearStart.parent('vizsort');
 
 	
 	pYearEnd = createP(2020);
-	pYearEnd.position(160, 20);
+	pYearEnd.position(160, 30);
 	pYearEnd.parent('vizsort');
 	
 	// //P5 Solution
@@ -253,8 +269,10 @@ function initializeCheckboxCon() {
 	checkboxsCon.forEach(function (checkbox) {
 		checkbox.changed(checkEventCon);
 	});
+	//display here
 	checkboxsCon.forEach(function (checkbox, i) {
-		checkbox.position(10, 70 + i * 20);
+		checkbox.parent('vizsort');
+		checkbox.class('checkmarkCon');
 	});
 
 }
@@ -264,8 +282,10 @@ function initializeCheckboxType() {
 	checkboxsType.forEach(function (checkbox) {
 		checkbox.changed(checkEventType);
 	});
+	//display here
 	checkboxsType.forEach(function (checkbox, i) {
-		checkbox.position(10, 210 + i * 20);
+		checkbox.parent('vizsort');
+		checkbox.class('checkmarkType');
 	});
 
 
@@ -305,7 +325,6 @@ function displaySliderYear() {
 	pYearStart.html(inputLeft.value);
 	pYearEnd.html(inputRight.value);
 
-	// pYearStart.html(slider.value());
 }
 
 function checkHidden() {

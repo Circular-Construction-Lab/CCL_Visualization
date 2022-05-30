@@ -1,3 +1,4 @@
+
 class Node{
 	constructor(name_, architect_, year_, continent_,typeStr_ ,aspectsStr_,typeIcon_, image_){
 		this.name = name_;
@@ -20,11 +21,11 @@ class Node{
 		this.edgeCluster = [];
 		
 		//Moving settings
-		this.p = new p5.Vector(random(windowWidth/2 - 200,windowWidth/2 + 200),random(windowHeight/2 - 200,windowHeight/2 + 200));
+		this.p = new p5.Vector(random(windowWidth/2 - windowWidth/5-100,windowWidth/2 + windowWidth/5-100),random(windowHeight/2 - windowHeight/5,windowHeight/2 + windowHeight/5));
 		this.u = new p5.Vector(0,0);
 		this.f = new p5.Vector(0,0);
-		this.dt = 0.5;
-		this.damping = 0.3;
+		this.dt = min(0.5, windowWidth/1920);
+		this.damping = min(0.3, windowWidth/1920);
 		this.isFixed = false;
 
 		//Display settings
@@ -263,8 +264,12 @@ class Aspect{
 		push();
 		fill(255);
 		noStroke();
+
 		textSize(12);
-		text(this.name, this.p.x- (this.d), this.p.y + 16);
+		let textW = textWidth(this.name);
+		text(this.name, this.p.x- textW/2, this.p.y + 20);
+
+
 		if(this.isDrag){
 			this.p.x = mouseX;
 			this.p.y = mouseY;
