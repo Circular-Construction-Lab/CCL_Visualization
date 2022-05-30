@@ -144,9 +144,8 @@ class Node{
 
 
 	checkEdges(xW, yH, width, height) {
-
-		if (this.p.x > width-xW) {
-			this.p.x = width-xW;
+		if (this.p.x > width-xW-200) {
+			this.p.x = width-xW-200;
 		  	this.u.x *= -1;
 		} else if (this.p.x < xW) {
 			this.p.x = xW;
@@ -189,7 +188,7 @@ class Edge{
 		let dist = dv.mag();
 		dv.normalize();
 		//here control force, speed
-		this.node.f =this.node.f.add(dv.mult((2*dist/100)-0.5));
+		this.node.f =this.node.f.add(dv.mult((0.5*dist/100)-0.5));
 	}
 
 	display(){

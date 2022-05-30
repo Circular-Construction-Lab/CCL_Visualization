@@ -41,7 +41,7 @@ function initializeCanvas() {
 	// createCanvas
 
 	canvas = createCanvas(windowWidth-200, windowHeight);
-	canvasPadding = 150;
+	canvasPadding = 0;
 	canvas.position(200,0);
 
 
@@ -388,7 +388,7 @@ function updateNodes() {
 function repel(node) {
 	let nodesRepelFrom = nodes.filter(element => element != node);
 	//here Control repel force
-	nodesRepelFrom.forEach(element => node.AddForceTo(element, -20));
+	nodesRepelFrom.forEach(element => node.AddForceTo(element, -2));
 }
 
 function initializeNodes() {
