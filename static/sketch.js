@@ -14,7 +14,9 @@ let checkboxsType = [];
 let types = [];
 
 let continentStrs = ['asia', 'europe', 'africa', 'north america', 'south america', 'oceania'];
-let typeStrs = ['data', 'built project', 'method', 'proposal','publication','movement','planning project','material','research'];
+// let typeStrs = ['data', 'built project', 'method', 'proposal','publication','movement','planning project','material','research'];
+let typeStrs = ['project', 'tool', 'publication', 'strategy'];
+
 let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
 
 
@@ -25,8 +27,9 @@ let popUps = [];
 
 function initializeCanvas() {
 	// createCanvas
-	canvas = createCanvas(windowWidth-200, windowHeight);
-	canvas.position(200,0);
+	canvas = createCanvas(windowWidth-400, windowHeight);
+	canvas.position(150,0);
+	// canvas.style('z-index','0');
 
 
 	// centerCanvas
@@ -38,7 +41,7 @@ function initializeCanvas() {
 
 function preload() {
 
-	table = loadTable('assets/Database_5_05.csv', 'csv', 'header');
+	table = loadTable('assets/Database_5_31.csv', 'csv', 'header');
 
 	
 	// load Icons
@@ -56,14 +59,17 @@ function setup() {
 	initializeNodes();
 	initializeEdges();
 
-	initializeSelectButton();
 	initializeSlider();
 	initializeCheckboxCon();
 	initializeCheckboxType();
+	initializeSelectButton();
 
 
-	popUp = new Popup();
-	popUp.initialStyle();
+
+	// popUp = new Popup_v2(0);
+
+	// popUp.initialStyle();
+	// popUps.push(popUp);
 
 	checkEventCon();
 	checkEventType();
@@ -72,10 +78,7 @@ function setup() {
 }
 
 function draw() {
-
-	//canvas = createCanvas(windowWidth-200, windowHeight);
 	windowResized();
-
 	background(0);
 	updateNodes();
 	hover();
@@ -90,26 +93,24 @@ function draw() {
 	sortContinent(continentSelected);
 	sortType(typeSelected);
 	checkHidden();
-
 }
+
 function checkEventCon() {
 	checkboxsCon.forEach(function (checkbox) {
 		if (checkbox.checked()) {
 			continentSelected.push(checkbox.value());
 		} else {
 			continentSelected = continentSelected.filter(e => e !== checkbox.value());
-
 		}
 	});
-
 }
+
 function checkEventType() {
 	checkboxsType.forEach(function (type) {
 		if (type.checked()) {
 			typeSelected.push(type.value());
 		} else {
 			typeSelected = typeSelected.filter(e => e !== type.value());
-
 		}
 	});
 }
@@ -130,56 +131,76 @@ function clearSelection(){
 	//check check status again
 	checkEventCon()
 	checkEventType();
-	
 }
 
 function initializeSelectButton(){
+	let p = createP('<br>');
+	p.parent('vizsort');
 	buttonAll = createButton('select all');
 	buttonClear = createButton('clear selection');
 
-	buttonAll.position(30, 440);
-	buttonClear.position(30, 480);
+	// buttonAll.position(30, 440);
+	// buttonClear.position(30, 480);
+
+	buttonAll.parent('vizsort');
+	buttonClear.parent('vizsort');
 
 	buttonAll.mousePressed(selectAllCheckboxes);
 	buttonClear.mousePressed(clearSelection);
+
+	let tempButton = createButton('<a href="readTest.html">test database content</a>');
+	tempButton.parent('vizsort');
+	let formButton = createButton('<a href="https://forms.gle/FZEA2GpuWxDxZUh87">add a project</a>');
+	formButton.parent('vizsort');
+
 }
 
 function initializeSlider() {
+	let p = createP('<br>By Year');
+	p.parent('vizsort');
+
 	slider = createSlider(1900, 2020, 1900);
-	slider.position(35, 10);
-	slider.style('width', '100px');
+
+	// slider.position(35, 10);
+	// slider.style('width', '100px');
 	pYearEnd = createP("2020");
-	pYearEnd.position(150, 0);
+	// pYearEnd.position(150, 0);
 	pYearStart = createP(1900);
-	pYearStart.position(35, 10);
+	// pYearStart.position(35, 10);
 	slider.parent('vizsort');
 	pYearStart.parent('vizsort');
 	pYearEnd.parent('vizsort');
-	// slider.class('slider');
-	// pYearEnd.class('slider');
-	// pYearStart.class('slider');
+	slider.class('slider');
+	pYearEnd.class('slider');
+	pYearStart.class('slider');
 
 }
 
 function initializeCheckboxCon() {
+	let p = createP('<br><br><br>By Location:');
+	p.parent('vizsort');
 	continentStrs.forEach(con => checkboxsCon.push(createCheckbox(con, true)));
 	checkboxsCon.forEach(function (checkbox) {
 		checkbox.changed(checkEventCon);
+		checkbox.class('checkbox');
+		checkbox.parent("vizsort");
 	});
-	checkboxsCon.forEach(function (checkbox, i) {
-		checkbox.position(10, 50 + i * 20);
-	});
+
 
 }
 
 function initializeCheckboxType() {
+	let p = createP('<br><br><br>By Type:');
+	p.parent('vizsort');
 	typeStrs.forEach(type => checkboxsType.push(createCheckbox(type, true)));
 	checkboxsType.forEach(function (checkbox) {
 		checkbox.changed(checkEventType);
+		checkbox.class('checkbox');
+		checkbox.parent("vizsort");
 	});
-	checkboxsType.forEach(function (checkbox, i) {
-		checkbox.position(10, 190 + i * 20);
-	});
+	// checkboxsType.forEach(function (checkbox, i) {
+	// 	checkbox.position(10, 190 + i * 20);
+	// });
 
 
 }
@@ -231,7 +252,7 @@ function checkHidden() {
 
 function hover() {
 	for (let i = 0; i < nodes.length; i++) {
-		if (overElement(nodes[i].p.x, nodes[i].p.y, nodes[i].d / 2)) {
+		if (overElement(nodes[i].p.x, nodes[i].p.y, nodes[i].d)) {
 			nodes[i].isHover = true;
 			nodes[i].edgeCluster.isHover = true;
 		}
@@ -241,6 +262,14 @@ function hover() {
 		}
 	}
 
+	for (let a = 0; a < aspects.length; a++) {
+		if (overElement(aspects[a].p.x, aspects[a].p.y, aspects[a].d)) {
+			aspects[a].isHover = true;
+		}
+		else {
+			aspects[a].isHover = false;
+		}
+	}
 
 }
 
@@ -255,6 +284,10 @@ function mousePressed() {
 
 	for (let n = 0; n < nodes.length; n++) {
 		if (overElement(nodes[n].p.x, nodes[n].p.y, nodes[n].d)) {
+
+			let pid = popUps.length;
+			popUp = new Popup_v2(pid);
+
 			let h1_ = nodes[n].name;
 			let h3_ = nodes[n].architect;
 			let loc_ = nodes[n].location;
@@ -262,7 +295,9 @@ function mousePressed() {
 			let pimg_ = nodes[n].imgUrl;
 			let p_ = nodes[n].descript;
 			popUp.updatePopup(h1_,h3_,loc_,year_,pimg_,p_);
-			popUp.toggleShow();
+			popUps.push(popUp);
+			// popUp.updatePopup(h1_,h3_,loc_,year_,pimg_,p_);
+			// popUp.toggleShow();
 			nodes[n].toggleExpand();
 		}
 	}
@@ -289,7 +324,7 @@ function overElement(x_, y_, d_) {
 
 function updateNodes() {
 	nodes.forEach(node => node.Move());
-	nodes.forEach(node => node.checkEdges(0, 0, windowWidth, windowHeight));
+	nodes.forEach(node => node.checkEdges(250, 20, windowWidth-450, windowHeight-20));
 	nodes.forEach(node => repel(node));
 	edgeClusters.forEach(edgeCluster => edgeCluster.ApplyForce());
 }
@@ -334,16 +369,16 @@ function initializeAspects() {
 	// let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
 
 		let colorIds = [];
-		colorIds.push([18,14,177]);
+		colorIds.push([100,150,255]);
 		colorIds.push([69,168,81]);
-		colorIds.push([219,143,34]);
-		colorIds.push([205,61,213]);
-		colorIds.push([79,43,157]);
-		colorIds.push([255,83,59]);
-		colorIds.push([15,179,146]);
+		colorIds.push([249,143,64]);
+		colorIds.push([245,160,205]);
+		colorIds.push([190,103,247]);
+		colorIds.push([255,103,109]);
+		colorIds.push([95,209,196]);
 		colorIds.push([246,13,71]);
 		colorIds.push([231,73,145]);
-		colorIds.push([232,91,22]);
+		colorIds.push([232,232,52]);
 
 		for(let a =0;a<aspectStrs.length;a++){
 			aspects.push(new Aspect(aspectStrs[a],colorIds[a]));
@@ -379,5 +414,6 @@ function findAspects(aspectsToFind) {
 }
 
 function windowResized(){
-	resizeCanvas(windowWidth-200, windowHeight);
+	resizeCanvas(windowWidth-400, windowHeight);
+	canvas.position(150,0);
 }

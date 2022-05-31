@@ -107,8 +107,8 @@ class Node{
 		push();
 		if(!this.isHidden){
 			if(this.isHover){
-				strokeWeight(2);
-				stroke(200,200,50);
+				strokeWeight(3);
+				stroke(220,220,220);
 				push();
 				noStroke();
 				fill(255,255,255);
@@ -124,6 +124,8 @@ class Node{
 			push();
 
 			//Icon Display
+			fill(255);
+			circle(this.p.x, this.p.y, 20);
 			image(this.typeIcon,this.p.x-(this.iconSize/2),this.p.y-(this.iconSize/2),this.iconSize,this.iconSize);
 
 			fill(255);
@@ -198,7 +200,10 @@ class Edge{
 	}
 
 	display(){
-		stroke(this.aspect.edgeColor[0],this.aspect.edgeColor[1],this.aspect.edgeColor[2]);
+		if(!this.node.isHover){
+			strokeWeight(this.aspect.strokeWidth);
+		}
+		stroke(this.aspect.edgeColor);
 		line(this.node.p.x,this.node.p.y, this.aspect.p.x,this.aspect.p.y);
 	}
 }
@@ -217,8 +222,9 @@ class EdgeCluster{
 		if(!this.node.isHidden){
 		push();
 		if(this.isHover){
-			stroke(255,255,50);
-			strokeWeight(3);
+			strokeWeight(3);			
+			stroke(255,255,255);
+
 		}else{
 			strokeWeight(0.5);
 		}
@@ -239,87 +245,165 @@ class Aspect{
 	constructor(name_,colorIdle_){
 		this.name = name_;
 		this.isDrag = false;
+		this.isHover = false;
 
 		//Location
 		this.p = new p5.Vector(random(100,windowWidth-300),random(100,windowHeight-100));
 
 		//Display settings
-		this.d = 10;
+		this.d = 20;
 		this.colorIdle = colorIdle_;
-		//this.colorIdle = [random(0,255),random(0,255),random(0,255)];
 		this.colorDrag = [255,255,50];	
 		this.strokeWidth = 0.5;	
      	this.strokeColor = (200,200,200);
-
+		
 		this.edgeColor = this.colorIdle;
+		this.sine = 0;
 	}
 
 	display(){
 
-		if (this.p.x > windowWidth-200) {
-			this.p.x = windowWidth-200;
-		} else if (this.p.x < 0) {
-			this.p.x = 0;
+		if (this.p.x > windowWidth-450) {
+			this.p.x = windowWidth-450;
+		} else if (this.p.x < 20) {
+			this.p.x = 20;
 		}
 	 
-		if (this.p.y > windowHeight) {
-			this.p.y = windowHeight;
-		}else if (this.p.y < 0){
-			this.p.y = 0;
+		if (this.p.y > windowHeight-20) {
+			this.p.y = windowHeight-20;
+		}else if (this.p.y < 20){
+			this.p.y = 20;
 		}
 	  
 		push();
-		fill(255);
-		noStroke();
-		textSize(12);
-		text(this.name, this.p.x- (this.d), this.p.y + 16);
+	
 		if(this.isDrag){
 			this.p.x = mouseX;
 			this.p.y = mouseY;
-			fill(this.colorDrag[0],this.colorDrag[1],this.colorDrag[2]);
+			// fill(this.colorDrag[0],this.colorDrag[1],this.colorDrag[2]);
+			stroke(this.colorIdle);
+			strokeWeight(0.5);
+			fill(0,0,0,0);
+			circle(this.p.x, this.p.y, this.d+this.sine);
+			this.sine++;
+			fill(this.colorIdle);
+
 		}else{
-			fill(this.colorIdle[0],this.colorIdle[1],this.colorIdle[2]);
+			// fill(this.colorIdle[0],this.colorIdle[1],this.colorIdle[2]);
+			fill(0);
+			
 		}
+		push();
+		if(this.isHover){
+			this.strokeWidth= 2;
+			strokeWeight(0.5);
+			stroke(this.colorIdle);
+			fill(0,0,0,0);
+			circle(this.p.x, this.p.y, this.d+this.sine);
+			this.sine++;
+			// this.edgeColor = [255,255,255];
+		}
+		else{
+			this.edgeColor = this.colorIdle;
+			this.strokeWidth= 0.5;
+			this.sine=0;
+		}
+		pop();
+		stroke(this.colorIdle);
+		strokeWeight(2);
 		circle(this.p.x,this.p.y,this.d);
+		fill(this.colorIdle);
+		noStroke();
+		textSize(14);
+		text(this.name, this.p.x- (this.d), this.p.y - 20);
 		pop();
 		}
 	}
 
 
 
-class Popup{
-	constructor(x_,y_){
-		this.x = x_;
-		this.y = y_;
+// class Popup{
+// 	constructor(x_,y_){
+// 		this.x = x_;
+// 		this.y = y_;
+// 		this.div = createDiv(' ');
+// 		this.pimg = createImg('../assets/Kendeda-icon.jpg','test image');
+// 		this.h1 = createElement('h1','initial h1');
+// 		//this.h2 = createElement('h2','initial h2');
+// 		this.h3 = createElement('h3','initial h3');
+// 		this.p = createP('initialized');
+// 	}
+
+// 	initialStyle(){
+// 		this.div.class('popup');
+// 		this.h1.class('proj');
+
+// 		this.h3.class('detail');
+// 		this.p.class('descript');
+// 		this.h1.parent(this.div);
+// 		this.pimg.parent(this.div);
+// 		this.h3.parent(this.div);
+
+// 		this.p.parent(this.div);
+// 		this.div.position(windowWidth-280,50);
+// 		this.div.hide();
+// 	}
+
+// 	updatePopup(h1_,h3_,loc_,year_,pimg_,p_){
+// 		this.h1.html(h1_);
+// 		this.h3.html(h3_ + '<br>' + loc_ + '<br>' + year_);
+// 		this.pimg = createImg(pimg_,'test');
+// 		this.p.html(p_);
+// 		print(pimg_);
+// 	}
+
+// 	toggleShow(){
+// 		this.div.show();
+// 	}
+
+// }
+
+class Popup_v2{
+	constructor(id_){
 		this.div = createDiv(' ');
+		this.div.id(id_);
+		this.container = createDiv(' ');
+		this.div.parent(this.container);
+		this.container.parent('info');
 		this.pimg = createImg('../assets/Kendeda-icon.jpg','test image');
-		this.h1 = createElement('h1','initial h1');
+		this.div.class('popup');
+		this.pfill = "<span id='close' onclick='this.parentNode.parentNode.removeChild(this.parentNode); return false;'>x</span><h1>initial h1</h1><h3>initial h3</h3><img src='../assets/Kendeda-icon.jpg'><p>initialized</p>";
+		this.div.html(this.pfill);
+
+		// this.div.position(windowWidth-280,50);
+		// this.h1 = createElement('h1','initial h1');
 		//this.h2 = createElement('h2','initial h2');
-		this.h3 = createElement('h3','initial h3');
-		this.p = createP('initialized');
+		// this.h3 = createElement('h3','initial h3');
+		// this.p = createP('initialized');
 	}
 
 	initialStyle(){
-		this.div.class('popup');
-		this.h1.class('proj');
-
-		this.h3.class('detail');
-		this.p.class('descript');
-		this.h1.parent(this.div);
-		this.pimg.parent(this.div);
-		this.h3.parent(this.div);
-
-		this.p.parent(this.div);
-		this.div.position(windowWidth-280,50);
-		this.div.hide();
+		// this.h1.class('proj');
+		// this.h3.class('detail');
+		// this.p.class('descript');
+		// this.h1.parent(this.div);
+		// this.pimg.parent(this.div);
+		// this.h3.parent(this.div);
+		// this.p.parent(this.div);
+		// this.div.hide();
 	}
 
 	updatePopup(h1_,h3_,loc_,year_,pimg_,p_){
-		this.h1.html(h1_);
-		this.h3.html(h3_ + '<br>' + loc_ + '<br>' + year_);
-		this.pimg = createImg(pimg_,'test');
-		this.p.html(p_);
-		print(pimg_);
+		// this.pfill = "<span id='close' onclick='this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode); return false;'>x</span><h1>"+ h1_ + "</h1><h3>" + h3_ + "</h3><h3>" + loc_ + ", " + year_ + "</h3><img src='../assets/Kendeda-icon.jpg'><p>" + p_ + "</p>";
+
+		this.pfill = "<span id='close' onclick='this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode); return false;'>x</span><h1>"+ h1_ + "</h1><h3>" + h3_ + "</h3><h3>" + loc_ + ", " + year_ + "</h3><img src='" + pimg_ + "'/><p>" + p_ + "</p>";
+		this.div.html(this.pfill);
+
+		// this.h1.html(h1_);
+		// this.h3.html(h3_ + '<br>' + loc_ + '<br>' + year_);
+		// this.pimg = createImg(pimg_,'test');
+		// this.p.html(p_);
+		// print(pimg_);
 	}
 
 	toggleShow(){
