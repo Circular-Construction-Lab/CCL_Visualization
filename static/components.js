@@ -1,3 +1,4 @@
+
 class Node{
 	constructor(name_, architect_, year_, location_, continent_,typeStr_ ,aspectsStr_, imgUrl_, sourceUrl_, descript_, typeIcon_){
 		this.name = name_;
@@ -23,11 +24,11 @@ class Node{
 		this.edgeCluster = [];
 		
 		//Moving settings
-		this.p = new p5.Vector(random(50,windowWidth-250),random(50,windowHeight-50));
+		this.p = new p5.Vector(random(windowWidth/2 - windowWidth/5-100,windowWidth/2 + windowWidth/5-100),random(windowHeight/2 - windowHeight/5,windowHeight/2 + windowHeight/5));
 		this.u = new p5.Vector(0,0);
 		this.f = new p5.Vector(0,0);
-		this.dt = 0.5;
-		this.damping = 0.3;
+		this.dt = min(0.5, windowWidth/1920);
+		this.damping = min(0.3, windowWidth/1920);
 		this.isFixed = false;
 
 		//Display settings
@@ -58,7 +59,7 @@ class Node{
 		this.f = this.f.add(dv.div(dist).mult(sourceStrength));
 	}
 
-	Move(dt, damping){
+	Move(){
 		// check fixed
 	    if (this.isFixed) return;
 
@@ -153,16 +154,16 @@ class Node{
 
 
 	checkEdges(xW, yH, width, height) {
-		if (this.p.x > xW+ width) {
-			this.p.x = xW+ width;
+		if (this.p.x > width-xW-200) {
+			this.p.x = width-xW-200;
 		  	this.u.x *= -1;
 		} else if (this.p.x < xW) {
 			this.p.x = xW;
 			this.u.x *= -1;
 		}
 	 
-		if (this.p.y > yH + height) {
-			this.p.y = yH + height;
+		if (this.p.y > height-yH) {
+			this.p.y = height-yH;
 			this.u.y *= -1;
 		}else if (this.p.y < yH){
 			this.p.y = yH;
@@ -196,7 +197,8 @@ class Edge{
 		let dv = p5.Vector.sub(this.aspect.p, this.node.p);
 		let dist = dv.mag();
 		dv.normalize();
-		this.node.f =this.node.f.add(dv.mult((dist/100)-0.5));
+		//here control force, speed
+		this.node.f =this.node.f.add(dv.mult((0.5*dist/100)-0.5));
 	}
 
 	display(){
@@ -276,7 +278,14 @@ class Aspect{
 		}
 	  
 		push();
-	
+
+		fill(255);
+		noStroke();
+
+		textSize(12);
+		let textW = textWidth(this.name);
+		text(this.name, this.p.x- textW/2, this.p.y + 20);
+    
 		if(this.isDrag){
 			this.p.x = mouseX;
 			this.p.y = mouseY;

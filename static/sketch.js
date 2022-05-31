@@ -1,4 +1,6 @@
 let canvas;
+let canvasXW;
+let canvasYH;
 let nodes = [];
 let aspects = [];
 let edgeClusters = [];
@@ -14,7 +16,7 @@ let checkboxsType = [];
 let types = [];
 
 let continentStrs = ['asia', 'europe', 'africa', 'north america', 'south america', 'oceania'];
-// let typeStrs = ['data', 'built project', 'method', 'proposal','publication','movement','planning project','material','research'];
+
 let typeStrs = ['project', 'tool', 'publication', 'strategy'];
 
 let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
@@ -25,17 +27,21 @@ let popUp;
 let popUps = [];
 
 
+
 function initializeCanvas() {
 	// createCanvas
 	canvas = createCanvas(windowWidth-400, windowHeight);
 	canvas.position(150,0);
-	// canvas.style('z-index','0');
 
 
-	// centerCanvas
-	// xW = (windowWidth - width) / 2;
-	// yH = (windowHeight - height) / 2;
-	// canvas.position(xW, yH);
+// Slider with 2 Handles
+var inputLeft = document.getElementById("input-left");
+var inputRight = document.getElementById("input-right");
+
+var thumbLeft = document.querySelector(".slider > .thumb.left");
+var thumbRight = document.querySelector(".slider > .thumb.right");
+var range = document.querySelector(".slider > .range");
+  
 }
 
 
@@ -54,6 +60,7 @@ function preload() {
 
 
 function setup() {
+
 	initializeCanvas();
 	initializeAspects();
 	initializeNodes();
@@ -77,22 +84,37 @@ function setup() {
 
 }
 
+
 function draw() {
 	windowResized();
 	background(0);
 	updateNodes();
 	hover();
+	noStack();
 
 	displayEdgeClusters();
 	displayAspects();
 	displayNodes();
 	displaySliderYear();
-	// displaySelectButton();
 
-	sortYear(slider.value(), 2020);
+	sortYear(inputLeft.value, inputRight.value);
 	sortContinent(continentSelected);
 	sortType(typeSelected);
 	checkHidden();
+}
+
+
+function noStack(){
+	aspects.forEach(function(aspect0){
+		aspects.forEach(function(aspect1){
+			if(aspect0 != aspect1){
+				let dist = aspect0.p.dist(aspect1.p);
+				if(dist < 10){
+					aspect0.p = aspect0.p.add(new p5.Vector(random(-aspect0.d/2,aspect0.d/2),random(-aspect0.d/2,aspect0.d/2)));
+				}
+			}
+		})
+	});
 }
 
 function checkEventCon() {
@@ -139,11 +161,12 @@ function initializeSelectButton(){
 	buttonAll = createButton('select all');
 	buttonClear = createButton('clear selection');
 
-	// buttonAll.position(30, 440);
-	// buttonClear.position(30, 480);
 
 	buttonAll.parent('vizsort');
 	buttonClear.parent('vizsort');
+
+	buttonAll.class('button');
+	buttonClear.class('button');
 
 	buttonAll.mousePressed(selectAllCheckboxes);
 	buttonClear.mousePressed(clearSelection);
@@ -156,25 +179,106 @@ function initializeSelectButton(){
 }
 
 function initializeSlider() {
+  
+
 	let p = createP('<br>By Year');
 	p.parent('vizsort');
 
 	slider = createSlider(1900, 2020, 1900);
 
+	
+	setLeftValue();
+	setRightValue();
+
+	pYearStart = createP(1900);
+// 	pYearStart.position(15, 30);
+
+	pYearStart.parent('vizsort');
+
+	
+	pYearEnd = createP(2020);
+// 	pYearEnd.position(160, 30);
+	pYearEnd.parent('vizsort');
+  
+
+// 	slider.class('slider');
+// 	pYearEnd.class('slider');
+// 	pYearStart.class('slider');
+
+	
+	// //P5 Solution
+	// slider = createSlider(1900, 2020, 1900);
 	// slider.position(35, 10);
 	// slider.style('width', '100px');
-	pYearEnd = createP("2020");
+	// pYearEnd = createP("2020");
 	// pYearEnd.position(150, 0);
-	pYearStart = createP(1900);
+	// pYearStart = createP(1900);
 	// pYearStart.position(35, 10);
-	slider.parent('vizsort');
-	pYearStart.parent('vizsort');
-	pYearEnd.parent('vizsort');
-	slider.class('slider');
-	pYearEnd.class('slider');
-	pYearStart.class('slider');
+	// slider.parent('vizsort');
+	// pYearStart.parent('vizsort');
+	// pYearEnd.parent('vizsort');
+	// // slider.class('slider');
+	// // pYearEnd.class('slider');
+	// // pYearStart.class('slider');
 
 }
+
+
+function setLeftValue() {
+	var _this = inputLeft,
+		min = parseInt(_this.min),
+		max = parseInt(_this.max);
+
+	_this.value = Math.min(parseInt(_this.value), parseInt(inputRight.value) - 1);
+
+	var percent = ((_this.value - min) / (max - min)) * 100;
+
+	thumbLeft.style.left = percent + "%";
+	range.style.left = percent + "%";
+}
+
+function setRightValue() {
+	var _this = inputRight,
+		min = parseInt(_this.min),
+		max = parseInt(_this.max);
+
+	_this.value = Math.max(parseInt(_this.value), parseInt(inputLeft.value) + 1);
+
+	var percent = ((_this.value - min) / (max - min)) * 100;
+
+	thumbRight.style.right = (100 - percent) + "%";
+	range.style.right = (100 - percent) + "%";
+}
+
+inputLeft.addEventListener("input", setLeftValue);
+inputRight.addEventListener("input", setRightValue);
+
+inputLeft.addEventListener("mouseover", function() {
+	thumbLeft.classList.add("hover");
+});
+inputLeft.addEventListener("mouseout", function() {
+	thumbLeft.classList.remove("hover");
+});
+inputLeft.addEventListener("mousedown", function() {
+	thumbLeft.classList.add("active");
+});
+inputLeft.addEventListener("mouseup", function() {
+	thumbLeft.classList.remove("active");
+});
+
+inputRight.addEventListener("mouseover", function() {
+	thumbRight.classList.add("hover");
+});
+inputRight.addEventListener("mouseout", function() {
+	thumbRight.classList.remove("hover");
+});
+inputRight.addEventListener("mousedown", function() {
+	thumbRight.classList.add("active");
+});
+inputRight.addEventListener("mouseup", function() {
+	thumbRight.classList.remove("active");
+});
+
 
 function initializeCheckboxCon() {
 	let p = createP('<br><br><br>By Location:');
@@ -184,6 +288,7 @@ function initializeCheckboxCon() {
 		checkbox.changed(checkEventCon);
 		checkbox.class('checkbox');
 		checkbox.parent("vizsort");
+    checkbox.class('checkmarkCon');
 	});
 
 
@@ -197,10 +302,8 @@ function initializeCheckboxType() {
 		checkbox.changed(checkEventType);
 		checkbox.class('checkbox');
 		checkbox.parent("vizsort");
+    checkbox.class('checkmarkType');
 	});
-	// checkboxsType.forEach(function (checkbox, i) {
-	// 	checkbox.position(10, 190 + i * 20);
-	// });
 
 
 }
@@ -236,7 +339,9 @@ function sortType(types_) {
 
 
 function displaySliderYear() {
-	pYearStart.html(slider.value());
+	pYearStart.html(inputLeft.value);
+	pYearEnd.html(inputRight.value);
+
 }
 
 function checkHidden() {
@@ -323,15 +428,22 @@ function overElement(x_, y_, d_) {
 }
 
 function updateNodes() {
+	//enable movements
 	nodes.forEach(node => node.Move());
+
+  //boundary
 	nodes.forEach(node => node.checkEdges(250, 20, windowWidth-450, windowHeight-20));
+// 	nodes.forEach(node => node.checkEdges(canvasPadding, canvasPadding, windowWidth, windowHeight));
+  
+	//repel from other nodes
 	nodes.forEach(node => repel(node));
 	edgeClusters.forEach(edgeCluster => edgeCluster.ApplyForce());
 }
 
 function repel(node) {
 	let nodesRepelFrom = nodes.filter(element => element != node);
-	nodesRepelFrom.forEach(element => node.AddForceTo(element, -10));
+	//here Control repel force
+	nodesRepelFrom.forEach(element => node.AddForceTo(element, -2));
 }
 
 function initializeNodes() {
@@ -366,6 +478,7 @@ function initializeNodes() {
 
 function initializeAspects() {
 
+
 	// let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
 
 		let colorIds = [];
@@ -380,11 +493,22 @@ function initializeAspects() {
 		colorIds.push([231,73,145]);
 		colorIds.push([232,232,52]);
 
-		for(let a =0;a<aspectStrs.length;a++){
+	
+
+	
+	//calculate aspect locations
+	n = aspectStrs.length;
+	let v = createVector(1, 0);
+	let points = [v.copy()];
+	for(let p = 1; p < n; ++p) {
+	  points.push(v.rotate(2*PI/n).copy());
+	}
+  
+	for(let a =0;a<aspectStrs.length;a++){
 			aspects.push(new Aspect(aspectStrs[a],colorIds[a]));
+      aspects[a].p = new p5.Vector(width/2 + points[a].x * (height-canvasPadding)/2,height/2 - points[a].y * (height-canvasPadding)/2);
 		}
 
-		// aspectStrs.forEach(aspectStr => aspects.push(new Aspect(aspectStr,)));
 }
 
 function initializeEdges() {
@@ -403,7 +527,9 @@ function displayNodes() {
 	nodes.forEach(node => node.display());
 }
 
-function displayAspects() {
+function displayAspects() {    
+
+	
 	aspects.forEach(aspect => aspect.display());
 }
 
