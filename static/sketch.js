@@ -26,22 +26,25 @@ let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'h
 let popUp;
 let popUps = [];
 
+var inputLeft;
+var inputRight;
+var thumbLeft;
+var thumbRight;
+var range;
+
 
 
 function initializeCanvas() {
 	// createCanvas
 	canvas = createCanvas(windowWidth-400, windowHeight);
 	canvas.position(150,0);
+  // Slider with 2 Handles
+inputLeft = document.getElementById("input-left");
+inputRight = document.getElementById("input-right");
 
-
-// Slider with 2 Handles
-var inputLeft = document.getElementById("input-left");
-var inputRight = document.getElementById("input-right");
-
-var thumbLeft = document.querySelector(".slider > .thumb.left");
-var thumbRight = document.querySelector(".slider > .thumb.right");
-var range = document.querySelector(".slider > .range");
-  
+thumbLeft = document.querySelector(".slider > .thumb.left");
+thumbRight = document.querySelector(".slider > .thumb.right");
+range = document.querySelector(".slider > .range");
 }
 
 
@@ -280,6 +283,7 @@ inputRight.addEventListener("mouseup", function() {
 });
 
 
+
 function initializeCheckboxCon() {
 	let p = createP('<br><br><br>By Location:');
 	p.parent('vizsort');
@@ -288,7 +292,7 @@ function initializeCheckboxCon() {
 		checkbox.changed(checkEventCon);
 		checkbox.class('checkbox');
 		checkbox.parent("vizsort");
-    checkbox.class('checkmarkCon');
+    // checkbox.class('checkmarkCon');
 	});
 
 
@@ -302,7 +306,7 @@ function initializeCheckboxType() {
 		checkbox.changed(checkEventType);
 		checkbox.class('checkbox');
 		checkbox.parent("vizsort");
-    checkbox.class('checkmarkType');
+    // checkbox.class('checkmarkType');
 	});
 
 
@@ -504,6 +508,9 @@ function initializeAspects() {
 	  points.push(v.rotate(2*PI/n).copy());
 	}
   
+	//unsure what canvaspadding was?
+	let canvasPadding = 100;
+
 	for(let a =0;a<aspectStrs.length;a++){
 			aspects.push(new Aspect(aspectStrs[a],colorIds[a]));
       aspects[a].p = new p5.Vector(width/2 + points[a].x * (height-canvasPadding)/2,height/2 - points[a].y * (height-canvasPadding)/2);

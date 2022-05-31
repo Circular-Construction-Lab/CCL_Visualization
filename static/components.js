@@ -282,9 +282,9 @@ class Aspect{
 		fill(255);
 		noStroke();
 
-		textSize(12);
-		let textW = textWidth(this.name);
-		text(this.name, this.p.x- textW/2, this.p.y + 20);
+		// textSize(12);
+		// let textW = textWidth(this.name);
+		// text(this.name, this.p.x- textW/2, this.p.y + 20);
     
 		if(this.isDrag){
 			this.p.x = mouseX;
