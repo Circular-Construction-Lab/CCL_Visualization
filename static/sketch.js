@@ -23,6 +23,7 @@ let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'h
 
 
 //pop-up box and array
+let pid = 0;
 let popUp;
 let popUps = [];
 
@@ -36,27 +37,30 @@ var range;
 
 function initializeCanvas() {
 	// createCanvas
-	canvas = createCanvas(windowWidth-400, windowHeight);
-	canvas.position(150,0);
-  // Slider with 2 Handles
-inputLeft = document.getElementById("input-left");
-inputRight = document.getElementById("input-right");
+	canvasXW=windowWidth-400;
+	canvasYH=windowHeight;
+	canvas = createCanvas(canvasXW, canvasYH);
+	//canvas.position(150,0);
 
-thumbLeft = document.querySelector(".slider > .thumb.left");
-thumbRight = document.querySelector(".slider > .thumb.right");
-range = document.querySelector(".slider > .range");
+  	// Slider with 2 Handles
+	inputLeft = document.getElementById("input-left");
+	inputRight = document.getElementById("input-right");
+
+	thumbLeft = document.querySelector(".slider > .thumb.left");
+	thumbRight = document.querySelector(".slider > .thumb.right");
+	range = document.querySelector(".slider > .range");
 }
 
 
 function preload() {
 
-	table = loadTable('assets/Database_5_31.csv', 'csv', 'header');
+	table = loadTable('assets/Database_6_07.csv', 'csv', 'header');
 
 	
 	// load Icons
 	
 	for(i = 0; i < typeStrs.length; i ++){
-		types.push(new Type(typeStrs[i], loadImage('assets/icon2/type'+i+'.png')));
+		types.push(new Type(typeStrs[i], loadImage('assets/icon4/type'+i+'.png')));
 	}
 
 }
@@ -74,13 +78,6 @@ function setup() {
 	initializeCheckboxType();
 	initializeSelectButton();
 
-
-
-	// popUp = new Popup_v2(0);
-
-	// popUp.initialStyle();
-	// popUps.push(popUp);
-
 	checkEventCon();
 	checkEventType();
 	
@@ -91,6 +88,7 @@ function setup() {
 function draw() {
 	windowResized();
 	background(0);
+
 	updateNodes();
 	hover();
 	noStack();
@@ -392,22 +390,24 @@ function mousePressed() {
 	}
 
 	for (let n = 0; n < nodes.length; n++) {
-		if (overElement(nodes[n].p.x, nodes[n].p.y, nodes[n].d)) {
+		if (overElement(nodes[n].p.x, nodes[n].p.y, nodes[n].d) && !nodes[n].isHidden) {
 
-			let pid = popUps.length;
-			popUp = new Popup_v2(pid);
+			if(!nodes[n].isExpand){
+				pid++;
+				popUp = new Popup_v2(pid, nodes[n]);
+				popUps.push(popUp);
+				nodes[n].isExpand=true;
+			}
 
-			let h1_ = nodes[n].name;
-			let h3_ = nodes[n].architect;
-			let loc_ = nodes[n].location;
-			let year_ = nodes[n].year;
-			let pimg_ = nodes[n].imgUrl;
-			let p_ = nodes[n].descript;
-			popUp.updatePopup(h1_,h3_,loc_,year_,pimg_,p_);
-			popUps.push(popUp);
-			// popUp.updatePopup(h1_,h3_,loc_,year_,pimg_,p_);
-			// popUp.toggleShow();
-			nodes[n].toggleExpand();
+			else{
+				nodes[n].isExpand = false;
+				for(let q=0; q< popUps.length; q++){
+					if(nodes[n].popUp == popUps[q].id){
+						popUps[q].updatePopup();
+					}
+				}
+				
+			}
 		}
 	}
 
@@ -436,7 +436,7 @@ function updateNodes() {
 	nodes.forEach(node => node.Move());
 
   //boundary
-	nodes.forEach(node => node.checkEdges(250, 20, windowWidth-450, windowHeight-20));
+	nodes.forEach(node => node.checkEdges(50, 50, canvasXW-50, canvasYH-50));
 // 	nodes.forEach(node => node.checkEdges(canvasPadding, canvasPadding, windowWidth, windowHeight));
   
 	//repel from other nodes
@@ -447,15 +447,13 @@ function updateNodes() {
 function repel(node) {
 	let nodesRepelFrom = nodes.filter(element => element != node);
 	//here Control repel force
-	nodesRepelFrom.forEach(element => node.AddForceTo(element, -2));
+	nodesRepelFrom.forEach(element => node.AddForceTo(element, -5));
 }
 
 function initializeNodes() {
 	let rows = table.getArray();
 
 	rows.forEach(function(row) {
-
-
 		let name_ = row[0].replaceAll('"', '');
 		let architect_ = row[1].replaceAll('"','');
 		let year_ = row[2].replaceAll('"','');
@@ -469,7 +467,6 @@ function initializeNodes() {
 
 		let iconIndex = typeStrs.findIndex(typeStr => typeStr == typeStr_);
 		let thistype = types[iconIndex];
-	
 
 		// nodes.push(new Node(row[0], row[1], int(row[2]), row[3], row[4], row[5], row[6].replaceAll('"').split(', '),row[7],row[8],row[9],thistype.typeIcon, img));
 		nodes.push(new Node(name_, architect_,year_,location_,continent_, typeStr_, aspectsStr_,imgUrl_, sourceUrl_, descript_,thistype.typeIcon));
@@ -481,8 +478,7 @@ function initializeNodes() {
 }
 
 function initializeAspects() {
-
-
+	
 	// let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
 
 		let colorIds = [];
@@ -498,8 +494,6 @@ function initializeAspects() {
 		colorIds.push([232,232,52]);
 
 	
-
-	
 	//calculate aspect locations
 	n = aspectStrs.length;
 	let v = createVector(1, 0);
@@ -509,7 +503,7 @@ function initializeAspects() {
 	}
   
 	//unsure what canvaspadding was?
-	let canvasPadding = 100;
+	let canvasPadding = 200;
 
 	for(let a =0;a<aspectStrs.length;a++){
 			aspects.push(new Aspect(aspectStrs[a],colorIds[a]));
@@ -547,6 +541,11 @@ function findAspects(aspectsToFind) {
 }
 
 function windowResized(){
-	resizeCanvas(windowWidth-400, windowHeight);
+
+	canvasXW=windowWidth-400;
+	canvasYH=windowHeight;
+	resizeCanvas(canvasXW, canvasYH);
 	canvas.position(150,0);
+
+
 }
