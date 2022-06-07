@@ -10,12 +10,14 @@
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.js"></script>
 	<script src="static/components.js"></script>
+	<script src="static/sketch.js"></script>
   </head>
 
   <body>
-	<div id="vizsort">
-
-		<div class="middle">
+	<div id="container">
+		<div id="vizsort"><br>
+			<h4><u>Sort Nodes</u></h4>
+      <div class="middle">
 			<div class="multi-range-slider">
 				<input type="range" id="input-left" min="1900" max="2020" value="1900">
 				<input type="range" id="input-right" min="1900" max="2020" value="2020">
@@ -28,11 +30,9 @@
 				</div>
 			</div>
 		</div>
+		</div>
+		<div id="info">
+		</div>
 	</div>
-
-	<div class="canvas">
-		<script src="static/sketch.js"></script>
-	</div>
-
   </body>
 </html>

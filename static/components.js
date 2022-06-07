@@ -1,27 +1,26 @@
 
 class Node{
-	constructor(name_, architect_, year_, continent_,typeStr_ ,aspectsStr_,typeIcon_, image_){
+	constructor(name_, architect_, year_, location_, continent_,typeStr_ ,aspectsStr_, imgUrl_, sourceUrl_, descript_, typeIcon_){
 		this.name = name_;
 		this.year = year_;
+		this.location = location_;
 		this.continent = continent_;
 		this.typeStr = typeStr_;
 		this.architect = architect_;
 		this.aspectsStr=aspectsStr_;
+		this.imgUrl = imgUrl_;
+		this.sourceUrl = sourceUrl_;
+		this.descript = descript_;
 		this.aspects;
-		//Image 
-		this.image = image_;
-
-		this.descript = "Following the principle of 'High Performance Low Emissions', NEST's HiLo unit realized by ETH Zurich's Block Research Group and the Architecture and Building Systems Group in cooperation with numerous industrial partners, demonstrates how attractive architecture can be when combining energy- and resource-saving construction and operation. The unit brings together innovative planning and design methods for efficient structures in concrete with self-learning and adaptive building technologies.The HiLo Unit features innovations that address challenges of global resource and energy consumption and greenhouse gas emissions, especially perpetuated by the construction industry is responsible for a large share  The integrated design and fabrication approach used to build the two-story unit marks a starting point for the way we may design and build in the future.";
 
 		//Icon settings
 		this.typeIcon = typeIcon_;
 		this.iconSize = 20;
 
-
 		this.edgeCluster = [];
 		
 		//Moving settings
-		this.p = new p5.Vector(random(windowWidth/2 - windowWidth/5-100,windowWidth/2 + windowWidth/5-100),random(windowHeight/2 - windowHeight/5,windowHeight/2 + windowHeight/5));
+		this.p = new p5.Vector(random(windowWidth/2 - windowWidth/5, windowWidth/2 + windowWidth/5),random(windowHeight/2 - windowHeight/5,windowHeight/2 + windowHeight/5));
 		this.u = new p5.Vector(0,0);
 		this.f = new p5.Vector(0,0);
 		this.dt = min(0.5, windowWidth/1920);
@@ -41,6 +40,7 @@ class Node{
      	this.strokeColor = (200,200,200);
 
 		this.isExpand = false;
+		this.popUp = 0;
 	}
 
 	AddForceTo(sourceNode_, sourceStrength_){
@@ -68,41 +68,42 @@ class Node{
 
 	display(){
 		//expand info box
+
+		// if(this.isHidden){
+		// 	this.isExpand = false;
+		// }
+
 		if(this.isExpand){
-
-			let eX = this.p.x - 70;
-			let eY = this.p.y -100;
-			let eWidth = 200;
-			let eHeight = 50;
-			let eColor = color(120,120,120);
-			eColor.setAlpha(200);
-
-			push();
-
-			stroke(200);
-			strokeWeight(1);			
-			fill(eColor);
-			rect(eX,eY,eWidth,eHeight, 3);
-
-			line(this.p.x, this.p.y, this.p.x-20, this.p.y-50);
-
-			noStroke();
-			fill(255);
-			textSize(14);
-			textStyle(BOLD);
-			text(this.name, eX+8, eY+17);
-			textSize(10);
-			textStyle(NORMAL);
-			text('by ' + this.architect, eX+10, eY+30);
-			text(this.type + ', ' + this.year, eX+10, eY + 40);
-			pop();
+				strokeWeight(5);
+				noFill();
+				stroke(225);
+				ellipse(this.p.x, this.p.y, 20);
+				push();
+				noStroke();
+				fill(255,255,255);
+				textSize(12);
+				let textW =textWidth(this.name);
+				text(this.name, this.p.x -textW/2, this.p.y -20);
 		}			
 		
 		push();
+
 		if(!this.isHidden){
+
 			if(this.isHover){
-				strokeWeight(2);
-				stroke(200,200,50);
+				fill(255);
+				strokeWeight(5);
+				stroke(220,220,220);
+				ellipse(this.p.x, this.p.y, 20);
+				strokeWeight(3);
+				stroke(220,220,220);
+				push();
+				noStroke();
+				fill(255,255,255);
+				textSize(12);
+				let textW =textWidth(this.name);
+				text(this.name, this.p.x -textW/2, this.p.y -20);
+				pop();
 			}
 			else{
 				strokeWeight(1);
@@ -111,20 +112,17 @@ class Node{
 
 			//sort Year test
 			push();
+
 			//Icon Display
+			fill(255);
 			image(this.typeIcon,this.p.x-(this.iconSize/2),this.p.y-(this.iconSize/2),this.iconSize,this.iconSize);
+			noStroke();
 
 			fill(255);
 			noStroke();
-			//Text Display
-// 			textSize(12);
-// 			text(this.year, this.p.x- (this.d), this.p.y + 30);
-// 			text(this.continent, this.p.x- (this.d), this.p.y + 40);
-// 			text(this.typeStr, this.p.x- (this.d), this.p.y + 50);
  			pop();
 			
-			//Circle Nodes Display
- 			// fill(this.color);
+			//Circle display
 			// circle(this.p.x,this.p.y,this.d);
 
 		}
@@ -145,16 +143,16 @@ class Node{
 
 
 	checkEdges(xW, yH, width, height) {
-		if (this.p.x > width-xW-200) {
-			this.p.x = width-xW-200;
+		if (this.p.x > width) {
+			this.p.x = width;
 		  	this.u.x *= -1;
 		} else if (this.p.x < xW) {
 			this.p.x = xW;
 			this.u.x *= -1;
 		}
 	 
-		if (this.p.y > height-yH) {
-			this.p.y = height-yH;
+		if (this.p.y > height) {
+			this.p.y = height;
 			this.u.y *= -1;
 		}else if (this.p.y < yH){
 			this.p.y = yH;
@@ -188,12 +186,16 @@ class Edge{
 		let dv = p5.Vector.sub(this.aspect.p, this.node.p);
 		let dist = dv.mag();
 		dv.normalize();
+		
 		//here control force, speed
-		this.node.f =this.node.f.add(dv.mult((0.5*dist/100)-0.5));
+		this.node.f =this.node.f.add(dv.mult(((0.5*dist)/100-0.5)));
 	}
 
 	display(){
-		stroke(this.aspect.edgeColor[0],this.aspect.edgeColor[1],this.aspect.edgeColor[2]);
+		if(!this.node.isHover){
+			strokeWeight(this.aspect.strokeWidth);
+		}
+		stroke(this.aspect.edgeColor);
 		line(this.node.p.x,this.node.p.y, this.aspect.p.x,this.aspect.p.y);
 	}
 }
@@ -212,8 +214,9 @@ class EdgeCluster{
 		if(!this.node.isHidden){
 		push();
 		if(this.isHover){
-			stroke(255,255,50);
-			strokeWeight(2);
+			strokeWeight(3);			
+			stroke(255,255,255);
+
 		}else{
 			strokeWeight(0.5);
 		}
@@ -223,6 +226,7 @@ class EdgeCluster{
 		strokeWeight(0.1);
 		
 	}
+
 }
 	ApplyForce(){
 		this.edges.forEach(edge => edge.ApplyForce());
@@ -230,100 +234,137 @@ class EdgeCluster{
 }
 
 class Aspect{
-	constructor(name_){
+	constructor(name_,colorIdle_){
 		this.name = name_;
 		this.isDrag = false;
+		this.isHover = false;
 
 		//Location
 		this.p = new p5.Vector(random(100,windowWidth-300),random(100,windowHeight-100));
 
 		//Display settings
-		this.d = 10;
-		this.colorIdle = [50,200,200];
+		this.d = 40;
+		this.colorIdle = colorIdle_;
 		this.colorDrag = [255,255,50];	
 		this.strokeWidth = 0.5;	
      	this.strokeColor = (200,200,200);
-
-		this.edgeColor = [random(0,255),random(0,255),random(0,255)];
+		
+		this.edgeColor = this.colorIdle;
+		this.sine = 0;
 	}
 
 	display(){
 
-		if (this.p.x > windowWidth-200) {
-			this.p.x = windowWidth-200;
-		} else if (this.p.x < 0) {
-			this.p.x = 0;
+		if (this.p.x > canvasXW-50) {
+			this.p.x = canvasXW-50;
+		} else if (this.p.x < 50) {
+			this.p.x = 50;
 		}
 	 
-		if (this.p.y > windowHeight) {
-			this.p.y = windowHeight;
-		}else if (this.p.y < 0){
-			this.p.y = 0;
+		if (this.p.y > canvasYH - 50) {
+			this.p.y = canvasYH - 50;
+		}else if (this.p.y < 50){
+			this.p.y = 50;
 		}
 	  
 		push();
+
 		fill(255);
 		noStroke();
 
-		textSize(12);
-		let textW = textWidth(this.name);
-		text(this.name, this.p.x- textW/2, this.p.y + 20);
 
-
+    
 		if(this.isDrag){
 			this.p.x = mouseX;
 			this.p.y = mouseY;
-			fill(this.colorDrag[0],this.colorDrag[1],this.colorDrag[2]);
+			// fill(this.colorDrag[0],this.colorDrag[1],this.colorDrag[2]);
+
+
+			stroke(this.colorIdle);
+			strokeWeight(0.5);
+			fill(0,0,0,0);
+			circle(this.p.x, this.p.y, this.d+this.sine);
+			this.sine++;
+			fill(this.colorIdle);
+
 		}else{
-			fill(this.colorIdle[0],this.colorIdle[1],this.colorIdle[2]);
+			// fill(this.colorIdle[0],this.colorIdle[1],this.colorIdle[2]);
+			fill(0);
+			
 		}
-		circle(this.p.x,this.p.y,this.d);
+
+		push();
+		if(this.isHover){
+			this.strokeWidth= 2;
+			strokeWeight(0.5);
+			stroke(this.colorIdle);
+			fill(0,0,0,0);
+			circle(this.p.x, this.p.y, this.d+this.sine);
+			this.sine++;
+		}
+
+		else{
+			this.edgeColor = this.colorIdle;
+			this.strokeWidth= 0.5;
+			this.sine=0;
+		}
 		pop();
+
+
+		stroke(255);
+		fill(this.colorIdle);
+		strokeWeight(2);
+		circle(this.p.x,this.p.y, this.d/1.5);
+		
+		push();
+		if(this.isHover){
+			noStroke();
+			fill(0)
+			circle(this.p.x, this.p.y, this.d/2);
+		}
+		pop();
+
+
+		let textW = textWidth(this.name);
+		stroke(0);
+		textSize(16);
+		text(this.name, this.p.x - (textW/2 -2), this.p.y - 25);
+		pop();
+
 		}
 	}
 
+class Popup_v2{
+	constructor(id_, node_){
+		this.id = id_;
+		this.node = node_;
 
+		//match to node
+		this.node.popUp = this.id;
 
-class Popup{
-	constructor(x_,y_){
-		this.x = x_;
-		this.y = y_;
+		//create new div html elements
+		this.container = createDiv(' ');
+		this.container.parent('info');
 		this.div = createDiv(' ');
-		this.pimg = createImg('../assets/Kendeda-icon.jpg','test image');
-		this.h1 = createElement('h1','initial h1');
-		//this.h2 = createElement('h2','initial h2');
-		this.h3 = createElement('h3','initial h3');
-		this.p = createP('initialized');
-	}
-
-	initialStyle(){
+		this.div.id(this.id);
+		this.div.parent(this.container);
 		this.div.class('popup');
-		this.h1.class('proj');
+	
+		//popup fill content
+		this.pfill= "<span id='close' onclick='this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode); return false;'>x</span><h1>"+ this.node.name + "</h1><h3>" + this.node.architect + "</h3><h3>" + this.node.location + ", " + this.node.year + "</h3><img src='" + this.node.imgUrl + "'/><p>" + this.node.descript + "</p>";
 
-		this.h3.class('detail');
-		this.p.class('descript');
-		this.h1.parent(this.div);
-		this.pimg.parent(this.div);
-		this.h3.parent(this.div);
-
-		this.p.parent(this.div);
-		this.div.position(windowWidth-280,50);
-		this.div.hide();
+		this.div.html(this.pfill);
 	}
 
-	updatePopup(h1_,h3_,cont_,year_,pimg_,p_){
-		this.h1.html(h1_);
-		this.h3.html(h3_ + '<br>' + cont_ + ', ' + year_);
-		this.pimg = pimg_;
-		this.p.html(p_);
-		
-	}
+	
 
-	toggleShow(){
-		this.div.show();
-	}
+
+	updatePopup(){
+		this.container.hide();
+	 }
 
 }
+
 class Type{
 	constructor(typeStr_, typeIcon_){
 		this.typeStr = typeStr_;
