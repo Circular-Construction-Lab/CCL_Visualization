@@ -279,7 +279,7 @@ class Aspect {
 			this.p.y = mouseY;
 			// fill(this.colorDrag[0],this.colorDrag[1],this.colorDrag[2]);
 			stroke(this.colorIdle);
-			strokeWeight(0.5);
+			strokeWeight(0.5 - map(this.sine,0,500,0,0.5));
 			fill(0, 0, 0, 0);
 			circle(this.p.x, this.p.y, this.d + this.sine);
 			this.sine++;
@@ -289,13 +289,14 @@ class Aspect {
 			fill(0);
 		}
 		push();
+
 		if (this.isHover) {
 			this.strokeWidth = 2;
-			strokeWeight(0.5);
+			strokeWeight(0.5 - map(this.sine,0,500,0,0.5));
 			stroke(this.colorIdle);
 			fill(0, 0, 0, 0);
 			circle(this.p.x, this.p.y, this.d + this.sine);
-			if (this.sine > 200) {
+			if (this.sine > 500) {
 				this.sine = 0
 			}
 			this.sine++;
@@ -303,7 +304,7 @@ class Aspect {
 			this.edgeColor = this.colorIdle;
 			this.strokeWidth = 0.5;
 			if (this.sine != 0 && this.sine < 500) {
-				strokeWeight(0.5);
+				strokeWeight(0.5 - map(this.sine,0,500,0,0.5));
 				stroke(this.colorIdle);
 				fill(0, 0, 0, 0);
 				circle(this.p.x, this.p.y, this.d + this.sine);
