@@ -15,6 +15,7 @@ let checkboxsCon = [];
 let checkboxsType = [];
 let types = [];
 
+<<<<<<< HEAD
 let continentStrs = [
 	"asia",
 	"europe",
@@ -38,12 +39,19 @@ let aspectStrs = [
 	"biological metabolism",
 	"energy",
 ];
+=======
+let continentStrs = ['Asia', 'Europe', 'Africa', 'North America', 'South America', 'Oceania'];
+let typeStrs = ['data', 'built project', 'method', 'proposal','installation','landscape architecture project','publication','movement','planning project','material','research'];
+let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
+
+>>>>>>> parent of 071425d (updata 0624)
 
 //pop-up box and array
 let pid = 0;
 let popUp;
 let popUps = [];
 
+<<<<<<< HEAD
 var inputLeft;
 var inputRight;
 var thumbLeft;
@@ -56,19 +64,40 @@ function initializeCanvas() {
 	canvasYH = windowHeight;
 	canvas = createCanvas(canvasXW, canvasYH);
 	//canvas.position(150,0);
+=======
+
+let img;
+
+function initializeCanvas() {
+	// createCanvas
+	canvas = createCanvas(windowWidth-200, windowHeight);
+	canvas.position(200,0);
+
+
+	// centerCanvas
+	// xW = (windowWidth - width) / 2;
+	// yH = (windowHeight - height) / 2;
+	// canvas.position(xW, yH);
+>>>>>>> parent of 071425d (updata 0624)
 }
 
-function preload() {
-	table = loadTable("assets/Database_6_07.csv", "csv", "header");
 
+<<<<<<< HEAD
 	// load Icons
+=======
+function preload() {
 
-	for (i = 0; i < typeStrs.length; i++) {
-		types.push(
-			new Type(typeStrs[i], loadImage("assets/icon4/type" + i + ".png"))
-		);
+	table = loadTable('assets/Database_4_18.csv', 'csv', 'header');
+
+	
+	// load Icons
+	for(i = 0; i < typeStrs.length; i ++){
+		types.push(new Type(typeStrs[i], loadImage('assets/type'+i+'.png')));
 	}
+>>>>>>> parent of 071425d (updata 0624)
+
 }
+
 
 function setup() {
 	initializeCanvas();
@@ -83,6 +112,8 @@ function setup() {
 
 	checkEventCon();
 	checkEventType();
+	
+
 }
 
 function draw() {
@@ -98,6 +129,7 @@ function draw() {
 	displayNodes();
 	displaySliderYear();
 
+<<<<<<< HEAD
 	sortYear(slider.noUiSlider.get()[0], slider.noUiSlider.get()[1]);
 	sortContinent(continentSelected);
 	sortType(typeSelected);
@@ -134,6 +166,13 @@ function noStack() {
 			}
 		});
 	});
+=======
+	sortYear(slider.value(), 2020);
+	sortContinent(continentSelected);
+	sortType(typeSelected);
+	checkHidden();
+
+>>>>>>> parent of 071425d (updata 0624)
 }
 
 function checkEventCon() {
@@ -141,9 +180,14 @@ function checkEventCon() {
 		if (checkbox.checked()) {
 			continentSelected.push(checkbox.value());
 		} else {
+<<<<<<< HEAD
 			continentSelected = continentSelected.filter(
 				(e) => e !== checkbox.value()
 			);
+=======
+			continentSelected = continentSelected.filter(e => e !== checkbox.value());
+
+>>>>>>> parent of 071425d (updata 0624)
 		}
 	});
 }
@@ -153,29 +197,35 @@ function checkEventType() {
 		if (type.checked()) {
 			typeSelected.push(type.value());
 		} else {
+<<<<<<< HEAD
 			typeSelected = typeSelected.filter((e) => e !== type.value());
+=======
+			typeSelected = typeSelected.filter(e => e !== type.value());
+
+>>>>>>> parent of 071425d (updata 0624)
 		}
 	});
 }
 
-function selectAllCheckboxes() {
-	console.log("select");
-	checkboxsCon.forEach((checkbox) => checkbox.checked(true));
-	checkboxsType.forEach((checkbox) => checkbox.checked(true));
+function selectAllCheckboxes(){
+	console.log('select');
+	checkboxsCon.forEach(checkbox => checkbox.checked(true));
+	checkboxsType.forEach(checkbox => checkbox.checked(true));
 	//check check status again
-	checkEventCon();
+	checkEventCon()
 	checkEventType();
 }
 
-function clearSelection() {
-	console.log("clear");
-	checkboxsCon.forEach((checkbox) => checkbox.checked(false));
-	checkboxsType.forEach((checkbox) => checkbox.checked(false));
+function clearSelection(){
+	console.log('clear');
+	checkboxsCon.forEach(checkbox => checkbox.checked(false));
+	checkboxsType.forEach(checkbox => checkbox.checked(false));
 	//check check status again
-	checkEventCon();
+	checkEventCon()
 	checkEventType();
 }
 
+<<<<<<< HEAD
 function initializeSelectButton() {
 	let p = createP("<br>");
 	p.parent("vizsort");
@@ -257,6 +307,57 @@ function initializeCheckboxType() {
 		checkbox.parent("vizsort");
 		// checkbox.class('checkmarkType');
 	});
+=======
+function initializeSelectButton(){
+	buttonAll = createButton('select all');
+	buttonClear = createButton('clear selection');
+
+	buttonAll.position(30, 440);
+	buttonClear.position(30, 480);
+
+	buttonAll.mousePressed(selectAllCheckboxes);
+	buttonClear.mousePressed(clearSelection);
+}
+
+function initializeSlider() {
+	slider = createSlider(1900, 2020, 1900);
+	slider.position(35, 10);
+	slider.style('width', '100px');
+	pYearEnd = createP("2020");
+	pYearEnd.position(150, 0);
+	pYearStart = createP(1900);
+	pYearStart.position(35, 10);
+	slider.parent('vizsort');
+	pYearStart.parent('vizsort');
+	pYearEnd.parent('vizsort');
+	// slider.class('slider');
+	// pYearEnd.class('slider');
+	// pYearStart.class('slider');
+
+}
+
+function initializeCheckboxCon() {
+	continentStrs.forEach(con => checkboxsCon.push(createCheckbox(con, true)));
+	checkboxsCon.forEach(function (checkbox) {
+		checkbox.changed(checkEventCon);
+	});
+	checkboxsCon.forEach(function (checkbox, i) {
+		checkbox.position(10, 50 + i * 20);
+	});
+
+}
+
+function initializeCheckboxType() {
+	typeStrs.forEach(type => checkboxsType.push(createCheckbox(type, true)));
+	checkboxsType.forEach(function (checkbox) {
+		checkbox.changed(checkEventType);
+	});
+	checkboxsType.forEach(function (checkbox, i) {
+		checkbox.position(10, 190 + i * 20);
+	});
+
+
+>>>>>>> parent of 071425d (updata 0624)
 }
 
 function sortYear(yearStart_, yearEnd_) {
@@ -288,13 +389,16 @@ function sortType(types_) {
 	});
 }
 
-// Display year silider text info
+
 function displaySliderYear() {
+<<<<<<< HEAD
 	// pYearStart.html(int(slider.noUiSlider.get()[0]));
 	// pYearEnd.html(int(slider.noUiSlider.get()[1]));
+=======
+	pYearStart.html(slider.value());
+>>>>>>> parent of 071425d (updata 0624)
 }
 
-// check if the node is hidden
 function checkHidden() {
 	nodes.forEach(function (node) {
 		if (node.isSortYear || node.isSortCont || node.isSortType) {
@@ -305,17 +409,19 @@ function checkHidden() {
 	});
 }
 
-// check if cursor is hovering on the node
+
 function hover() {
 	for (let i = 0; i < nodes.length; i++) {
 		if (overElement(nodes[i].p.x, nodes[i].p.y, nodes[i].d)) {
 			nodes[i].isHover = true;
 			nodes[i].edgeCluster.isHover = true;
-		} else {
+		}
+		else {
 			nodes[i].isHover = false;
 			nodes[i].edgeCluster.isHover = false;
 		}
 	}
+<<<<<<< HEAD
 
 	for (let a = 0; a < aspects.length; a++) {
 		if (overElement(aspects[a].p.x, aspects[a].p.y, aspects[a].d)) {
@@ -324,10 +430,13 @@ function hover() {
 			aspects[a].isHover = false;
 		}
 	}
+=======
+>>>>>>> parent of 071425d (updata 0624)
 }
 
 //called when mouse is pressed to drag an aspect
 function mousePressed() {
+
 	for (let i = 0; i < aspects.length; i++) {
 		if (overElement(aspects[i].p.x, aspects[i].p.y, aspects[i].d / 2)) {
 			aspects[i].isDrag = true;
@@ -335,6 +444,7 @@ function mousePressed() {
 	}
 
 	for (let n = 0; n < nodes.length; n++) {
+<<<<<<< HEAD
 		if (
 			overElement(nodes[n].p.x, nodes[n].p.y, nodes[n].d) &&
 			!nodes[n].isHidden
@@ -352,8 +462,21 @@ function mousePressed() {
 					}
 				}
 			}
+=======
+		if (overElement(nodes[n].p.x, nodes[n].p.y, nodes[n].d)) {
+			let h1_ = nodes[n].name;
+			let h3_ = nodes[n].architect;
+			let cont_ = nodes[n].continent;
+			let year_ = nodes[n].year;
+			let pimg_ = nodes[n].image;
+			let p_ = nodes[n].descript;
+			popUp.updatePopup(h1_,h3_,cont_,year_,pimg_,p_);
+			popUp.toggleShow();
+			nodes[n].toggleExpand();
+>>>>>>> parent of 071425d (updata 0624)
 		}
 	}
+
 }
 
 //called when mouse released to set the aspect in new location
@@ -368,12 +491,14 @@ function mouseReleased() {
 function overElement(x_, y_, d_) {
 	if (dist(x_, y_, mouseX, mouseY) < d_) {
 		return true;
-	} else {
+	}
+	else {
 		return false;
 	}
 }
 
 function updateNodes() {
+<<<<<<< HEAD
 	//enable movements
 	nodes.forEach((node) => node.Move());
 
@@ -392,10 +517,22 @@ function repel(node) {
 	let nodesRepelFrom = nodes.filter((element) => element != node);
 	//here Control repel force
 	nodesRepelFrom.forEach((element) => node.AddForceTo(element, -5));
+=======
+	nodes.forEach(node => node.Move());
+	nodes.forEach(node => node.checkEdges(0, 0, windowWidth, windowHeight));
+	nodes.forEach(node => repel(node));
+	edgeClusters.forEach(edgeCluster => edgeCluster.ApplyForce());
+}
+
+function repel(node) {
+	let nodesRepelFrom = nodes.filter(element => element != node);
+	nodesRepelFrom.forEach(element => node.AddForceTo(element, -10));
+>>>>>>> parent of 071425d (updata 0624)
 }
 
 function initializeNodes() {
 	let rows = table.getArray();
+<<<<<<< HEAD
 	
 	// data refine
 	rows.forEach(function (row) {
@@ -467,6 +604,19 @@ function initializeAspects() {
 			height / 2 - (points[a].y * (height - canvasPadding)) / 2
 		);
 	}
+=======
+	rows.forEach(function(row) {
+		let iconIndex = typeStrs.findIndex(typeStr => typeStr == row[5]);
+		let thistype = types[iconIndex];
+		nodes.push(new Node(row[0], row[1], int(row[2]), row[4], row[5], row[6].replaceAll('"').split(', '),thistype.typeIcon, img));
+	});
+	
+	nodes.forEach(node => node.aspects = findAspects(node.aspectsStr));
+}
+
+function initializeAspects() {
+		aspectStrs.forEach(aspectStr => aspects.push(new Aspect(aspectStr)));
+>>>>>>> parent of 071425d (updata 0624)
 }
 
 function initializeEdges() {
@@ -476,29 +626,38 @@ function initializeEdges() {
 	});
 }
 
+
 function displayEdgeClusters() {
-	edgeClusters.forEach((edgeCluster) => edgeCluster.display());
+	edgeClusters.forEach(edgeCluster => edgeCluster.display());
 }
 
 function displayNodes() {
-	nodes.forEach((node) => node.display());
+	nodes.forEach(node => node.display());
 }
 
 function displayAspects() {
+<<<<<<< HEAD
 	aspects.forEach((aspect) => aspect.display());
+=======
+	aspects.forEach(aspect => aspect.display());
+>>>>>>> parent of 071425d (updata 0624)
 }
 
 function findAspects(aspectsToFind) {
 	aspectsFound = [];
-	aspectsToFind.forEach((aspect) =>
-		aspectsFound.push(aspects.find((element) => element.name == aspect))
-	);
+	aspectsToFind.forEach(aspect => aspectsFound.push(aspects.find(element => element.name == aspect)));
 	return aspectsFound;
 }
 
+<<<<<<< HEAD
 function windowResized() {
 	canvasXW = windowWidth - 400;
 	canvasYH = windowHeight;
 	resizeCanvas(canvasXW, canvasYH);
 	canvas.position(150, 0);
 }
+=======
+function windowResized(){
+	resizeCanvas(windowWidth-200, windowHeight);
+}
+>>>>>>> parent of 071425d (updata 0624)
