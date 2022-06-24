@@ -1,0 +1,288 @@
+.
+html, body {
+  /* background-color:rgb(19, 19, 19); */
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height:100%;
+  overflow-y:hidden;
+}
+
+canvas {
+  display: block;
+  position: relative;
+}
+ 
+div {
+  color:white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+}
+
+button {
+  border: none;
+  background-color: rgb(61, 61, 61);
+  color: white;
+  width: 112px;
+  padding: 5px;
+  margin: 5px;
+  text-transform: uppercase;
+  font-size: 8pt;
+}
+
+button:hover {
+  background-color:rgb(106, 106, 106);
+}
+
+
+
+/* checkbox styling, in progress */
+
+.checkbox {
+  padding: 0px 0px 5px 10px;
+  font-size: 8pt;
+}
+
+
+input[type="checkbox"]{
+  background-color:rgb(61, 61, 61);
+  margin: 0;
+  margin: 1px 4px 1px 0px;
+  font: inhereit;
+  width: 0.75em;
+  height:0.75em;
+  transform: translateY(0.15em);
+}
+
+input[type="checkbox"]:hover{
+  background-color:rgb(150,150,150);
+}
+
+
+#container {
+  width:100%;
+  height:100%;
+  overflow: hidden;
+  background-color: black;
+}
+
+#vizsort {
+  float: left;
+  width:150px;
+  height:100%;
+
+  padding: 25px;
+  margin: 0;
+  overflow: hidden;
+  line-height: 5pt;
+  text-transform:uppercase;
+
+}
+
+#info {
+  float: right;
+  width: 250px;
+  height: 100%;
+  background-color: none;
+  overflow-y: scroll;
+  padding: 20px 0px 0px 0px;
+  margin:0;
+  align-content: center;
+}
+
+
+.slider {
+  color: white;
+  font-size: 8pt;
+}
+
+img {
+  max-width: 180px;
+  height: auto;
+}
+
+p {
+  font-size: 8pt;
+  line-height: 12pt;
+  font-weight: 100;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+  color:white;
+  text-decoration: none;
+}
+
+
+
+/* POP-UP STYLING */
+.popup {
+  width: auto;
+  border:1px solid rgb(61, 61, 61);
+  margin: 10px 20px 0px 0px;
+  padding: 20px;
+  height: 300px;
+  background-color: none;
+  overflow-y: scroll;
+  /* padding: 5px 20px 10px 15px; */
+  color: white;
+  font-family: Helvetica, Arial, sans-serif;
+  hyphens: auto;
+  /* border: 2px solid rgb(150,150,150); */
+
+}
+
+
+h1 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+
+h3 {
+  font-size: 12px;
+  font-weight:lighter;
+  font-style: italic;
+  color: rgb(190, 190, 190);
+  line-height: 12px;
+}
+
+#close {
+  align-content: center;
+  float: right;
+  padding: 0px 0px 5px 5px;
+  width: 12px;
+  height: 12px;
+  background:black;
+  border: 0.5px solid rgb(97, 97, 97);
+}
+
+#close:hover {
+  background:rgb(50, 50, 50)
+}
+
+/* CUSTOM SCROLLBAR
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+  background: rgb(50, 50, 50); 
+}
+  
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #a7a7a7; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(194, 194, 194); 
+} 
+
+/* .middle {
+	transform: translate(10px, 20px);
+	position: absolute;
+	width: 100%;
+	max-width: 190px;
+}
+
+.slider {
+	position: relative;
+	z-index: 1;
+	height: 10px;
+	margin: 0 15px;
+}
+.slider > .track {
+	position: absolute;
+	z-index: 1;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	border-radius: 5px;
+	background-color: #c6aee7;
+}
+.slider > .range {
+	position: absolute;
+	z-index: 2;
+	left: 25%;
+	right: 25%;
+	top: 0;
+	bottom: 0;
+	border-radius: 5px;
+	background-color: #6200ee;
+}
+
+.slider > .thumb {
+	position: absolute;
+	z-index: 3;
+	width: 20px;
+	height: 20px;
+	background-color: #6200ee;
+	border-radius: 50%;
+	box-shadow: 0 0 0 0 rgba(98,0,238,.1);
+	transition: box-shadow .3s ease-in-out;
+}
+.slider > .thumb.left {
+	left: 25%;
+	transform: translate(-10px, -5px);
+}
+.slider > .thumb.right {
+	right: 25%;
+	transform: translate(10px, -5px);
+}
+.slider > .thumb.hover {
+	box-shadow: 0 0 0 5px rgba(98,0,238,.1);
+}
+.slider > .thumb.active {
+	box-shadow: 0 0 0 10px rgba(98,0,238,.2);
+}
+
+input[type=range] {
+	position: absolute;
+	pointer-events: none;
+	-webkit-appearance: none;
+	z-index: 2;
+	height: 10px;
+	width: 100%;
+	opacity: 0;
+}
+input[type=range]::-webkit-slider-thumb {
+	pointer-events: all;
+	width: 20px;
+	height: 20px;
+	border-radius: 0;
+	border: 0 none;
+	background-color: red;
+	-webkit-appearance: none;
+} */
+
+
+/* .checkmarkCon {
+  position: relative;
+  top: 2vh;
+  left: 5%;
+  height: 25px;
+  width: 200px;
+}
+.checkmarkType {
+  position: relative;
+  top: 5vh;
+  left: 5%;
+  height: 25px;
+  width: 200px;
+}
+
+.button {
+  position: relative;
+  top: 90%;
+  left: 5%;
+  height: 25px;
+  margin: 3px;
+  width: 180px;
+} */
