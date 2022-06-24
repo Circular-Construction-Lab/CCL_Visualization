@@ -1,4 +1,6 @@
 let canvas;
+let canvasXW;
+let canvasYH;
 let nodes = [];
 let aspects = [];
 let edgeClusters = [];
@@ -13,12 +15,6 @@ let checkboxsCon = [];
 let checkboxsType = [];
 let types = [];
 
-<<<<<<< Updated upstream
-let continentStrs = ['Asia', 'Europe', 'Africa', 'North America', 'South America', 'Oceania'];
-let typeStrs = ['data', 'built project', 'method', 'proposal','installation','landscape architecture project','publication','movement','planning project','material','research'];
-let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
-
-=======
 let continentStrs = [
 	"asia",
 	"europe",
@@ -42,27 +38,12 @@ let aspectStrs = [
 	"biological metabolism",
 	"energy",
 ];
->>>>>>> Stashed changes
 
 //pop-up box and array
+let pid = 0;
 let popUp;
 let popUps = [];
 
-<<<<<<< Updated upstream
-
-let img;
-
-function initializeCanvas() {
-	// createCanvas
-	canvas = createCanvas(windowWidth-200, windowHeight);
-	canvas.position(200,0);
-
-
-	// centerCanvas
-	// xW = (windowWidth - width) / 2;
-	// yH = (windowHeight - height) / 2;
-	// canvas.position(xW, yH);
-=======
 var inputLeft;
 var inputRight;
 var thumbLeft;
@@ -75,23 +56,12 @@ function initializeCanvas() {
 	canvasYH = windowHeight;
 	canvas = createCanvas(canvasXW, canvasYH);
 	//canvas.position(150,0);
->>>>>>> Stashed changes
 }
 
 function preload() {
 	table = loadTable("assets/Database_6_07.csv", "csv", "header");
 
-<<<<<<< Updated upstream
-	table = loadTable('assets/Database_4_18.csv', 'csv', 'header');
-
-	
 	// load Icons
-	for(i = 0; i < typeStrs.length; i ++){
-		types.push(new Type(typeStrs[i], loadImage('assets/type'+i+'.png')));
-	}
-=======
-	// load Icons
->>>>>>> Stashed changes
 
 	for (i = 0; i < typeStrs.length; i++) {
 		types.push(
@@ -106,41 +76,28 @@ function setup() {
 	initializeNodes();
 	initializeEdges();
 
-	initializeSelectButton();
 	initializeSlider();
 	initializeCheckboxCon();
 	initializeCheckboxType();
-
-
-	popUp = new Popup();
-	popUp.initialStyle();
+	initializeSelectButton();
 
 	checkEventCon();
 	checkEventType();
 }
 
 function draw() {
-
-	//canvas = createCanvas(windowWidth-200, windowHeight);
 	windowResized();
-
 	background(0);
+
 	updateNodes();
 	hover();
+	noStack();
 
 	displayEdgeClusters();
 	displayAspects();
 	displayNodes();
 	displaySliderYear();
-	// displaySelectButton();
 
-<<<<<<< Updated upstream
-	sortYear(slider.value(), 2020);
-	sortContinent(continentSelected);
-	sortType(typeSelected);
-	checkHidden();
-
-=======
 	sortYear(slider.noUiSlider.get()[0], slider.noUiSlider.get()[1]);
 	sortContinent(continentSelected);
 	sortType(typeSelected);
@@ -177,36 +134,26 @@ function noStack() {
 			}
 		});
 	});
->>>>>>> Stashed changes
 }
+
 function checkEventCon() {
 	checkboxsCon.forEach(function (checkbox) {
 		if (checkbox.checked()) {
 			continentSelected.push(checkbox.value());
 		} else {
-<<<<<<< Updated upstream
-			continentSelected = continentSelected.filter(e => e !== checkbox.value());
-
-=======
 			continentSelected = continentSelected.filter(
 				(e) => e !== checkbox.value()
 			);
->>>>>>> Stashed changes
 		}
 	});
-
 }
+
 function checkEventType() {
 	checkboxsType.forEach(function (type) {
 		if (type.checked()) {
 			typeSelected.push(type.value());
 		} else {
-<<<<<<< Updated upstream
-			typeSelected = typeSelected.filter(e => e !== type.value());
-
-=======
 			typeSelected = typeSelected.filter((e) => e !== type.value());
->>>>>>> Stashed changes
 		}
 	});
 }
@@ -227,57 +174,8 @@ function clearSelection() {
 	//check check status again
 	checkEventCon();
 	checkEventType();
-	
 }
 
-<<<<<<< Updated upstream
-function initializeSelectButton(){
-	buttonAll = createButton('select all');
-	buttonClear = createButton('clear selection');
-
-	buttonAll.position(30, 440);
-	buttonClear.position(30, 480);
-
-	buttonAll.mousePressed(selectAllCheckboxes);
-	buttonClear.mousePressed(clearSelection);
-}
-
-function initializeSlider() {
-	slider = createSlider(1900, 2020, 1900);
-	slider.position(35, 10);
-	slider.style('width', '100px');
-	pYearEnd = createP("2020");
-	pYearEnd.position(150, 0);
-	pYearStart = createP(1900);
-	pYearStart.position(35, 10);
-	slider.parent('vizsort');
-	pYearStart.parent('vizsort');
-	pYearEnd.parent('vizsort');
-	// slider.class('slider');
-	// pYearEnd.class('slider');
-	// pYearStart.class('slider');
-
-}
-
-function initializeCheckboxCon() {
-	continentStrs.forEach(con => checkboxsCon.push(createCheckbox(con, true)));
-	checkboxsCon.forEach(function (checkbox) {
-		checkbox.changed(checkEventCon);
-	});
-	checkboxsCon.forEach(function (checkbox, i) {
-		checkbox.position(10, 50 + i * 20);
-	});
-
-}
-
-function initializeCheckboxType() {
-	typeStrs.forEach(type => checkboxsType.push(createCheckbox(type, true)));
-	checkboxsType.forEach(function (checkbox) {
-		checkbox.changed(checkEventType);
-	});
-	checkboxsType.forEach(function (checkbox, i) {
-		checkbox.position(10, 190 + i * 20);
-=======
 function initializeSelectButton() {
 	let p = createP("<br>");
 	p.parent("vizsort");
@@ -358,7 +256,6 @@ function initializeCheckboxType() {
 		checkbox.class("checkbox");
 		checkbox.parent("vizsort");
 		// checkbox.class('checkmarkType');
->>>>>>> Stashed changes
 	});
 }
 
@@ -393,12 +290,8 @@ function sortType(types_) {
 
 // Display year silider text info
 function displaySliderYear() {
-<<<<<<< Updated upstream
-	pYearStart.html(slider.value());
-=======
 	// pYearStart.html(int(slider.noUiSlider.get()[0]));
 	// pYearEnd.html(int(slider.noUiSlider.get()[1]));
->>>>>>> Stashed changes
 }
 
 // check if the node is hidden
@@ -415,7 +308,7 @@ function checkHidden() {
 // check if cursor is hovering on the node
 function hover() {
 	for (let i = 0; i < nodes.length; i++) {
-		if (overElement(nodes[i].p.x, nodes[i].p.y, nodes[i].d / 2)) {
+		if (overElement(nodes[i].p.x, nodes[i].p.y, nodes[i].d)) {
 			nodes[i].isHover = true;
 			nodes[i].edgeCluster.isHover = true;
 		} else {
@@ -423,8 +316,6 @@ function hover() {
 			nodes[i].edgeCluster.isHover = false;
 		}
 	}
-<<<<<<< Updated upstream
-=======
 
 	for (let a = 0; a < aspects.length; a++) {
 		if (overElement(aspects[a].p.x, aspects[a].p.y, aspects[a].d)) {
@@ -433,7 +324,6 @@ function hover() {
 			aspects[a].isHover = false;
 		}
 	}
->>>>>>> Stashed changes
 }
 
 //called when mouse is pressed to drag an aspect
@@ -445,18 +335,6 @@ function mousePressed() {
 	}
 
 	for (let n = 0; n < nodes.length; n++) {
-<<<<<<< Updated upstream
-		if (overElement(nodes[n].p.x, nodes[n].p.y, nodes[n].d)) {
-			let h1_ = nodes[n].name;
-			let h3_ = nodes[n].architect;
-			let cont_ = nodes[n].continent;
-			let year_ = nodes[n].year;
-			let pimg_ = nodes[n].image;
-			let p_ = nodes[n].descript;
-			popUp.updatePopup(h1_,h3_,cont_,year_,pimg_,p_);
-			popUp.toggleShow();
-			nodes[n].toggleExpand();
-=======
 		if (
 			overElement(nodes[n].p.x, nodes[n].p.y, nodes[n].d) &&
 			!nodes[n].isHidden
@@ -474,7 +352,6 @@ function mousePressed() {
 					}
 				}
 			}
->>>>>>> Stashed changes
 		}
 	}
 }
@@ -497,17 +374,6 @@ function overElement(x_, y_, d_) {
 }
 
 function updateNodes() {
-<<<<<<< Updated upstream
-	nodes.forEach(node => node.Move());
-	nodes.forEach(node => node.checkEdges(0, 0, windowWidth, windowHeight));
-	nodes.forEach(node => repel(node));
-	edgeClusters.forEach(edgeCluster => edgeCluster.ApplyForce());
-}
-
-function repel(node) {
-	let nodesRepelFrom = nodes.filter(element => element != node);
-	nodesRepelFrom.forEach(element => node.AddForceTo(element, -10));
-=======
 	//enable movements
 	nodes.forEach((node) => node.Move());
 
@@ -526,24 +392,10 @@ function repel(node) {
 	let nodesRepelFrom = nodes.filter((element) => element != node);
 	//here Control repel force
 	nodesRepelFrom.forEach((element) => node.AddForceTo(element, -5));
->>>>>>> Stashed changes
 }
 
 function initializeNodes() {
 	let rows = table.getArray();
-<<<<<<< Updated upstream
-	rows.forEach(function(row) {
-		let iconIndex = typeStrs.findIndex(typeStr => typeStr == row[5]);
-		let thistype = types[iconIndex];
-		nodes.push(new Node(row[0], row[1], int(row[2]), row[4], row[5], row[6].replaceAll('"').split(', '),thistype.typeIcon, img));
-	});
-	
-	nodes.forEach(node => node.aspects = findAspects(node.aspectsStr));
-}
-
-function initializeAspects() {
-		aspectStrs.forEach(aspectStr => aspects.push(new Aspect(aspectStr)));
-=======
 	
 	// data refine
 	rows.forEach(function (row) {
@@ -615,7 +467,6 @@ function initializeAspects() {
 			height / 2 - (points[a].y * (height - canvasPadding)) / 2
 		);
 	}
->>>>>>> Stashed changes
 }
 
 function initializeEdges() {
@@ -634,11 +485,7 @@ function displayNodes() {
 }
 
 function displayAspects() {
-<<<<<<< Updated upstream
-	aspects.forEach(aspect => aspect.display());
-=======
 	aspects.forEach((aspect) => aspect.display());
->>>>>>> Stashed changes
 }
 
 function findAspects(aspectsToFind) {
@@ -649,15 +496,9 @@ function findAspects(aspectsToFind) {
 	return aspectsFound;
 }
 
-<<<<<<< Updated upstream
-function windowResized(){
-	resizeCanvas(windowWidth-200, windowHeight);
-}
-=======
 function windowResized() {
 	canvasXW = windowWidth - 400;
 	canvasYH = windowHeight;
 	resizeCanvas(canvasXW, canvasYH);
 	canvas.position(150, 0);
 }
->>>>>>> Stashed changes
