@@ -1,6 +1,7 @@
 
 class Node{
 	constructor(name_, architect_, year_, location_, continent_,typeStr_ ,aspectsStr_, imgUrl_, sourceUrl_, descript_, typeIcon_){
+		//BASIC INFO
 		this.name = name_;
 		this.year = year_;
 		this.location = location_;
@@ -11,15 +12,9 @@ class Node{
 		this.imgUrl = imgUrl_;
 		this.sourceUrl = sourceUrl_;
 		this.descript = descript_;
-		this.aspects;
-
-		//Icon settings
-		this.typeIcon = typeIcon_;
-		this.iconSize = 25;
-
-		this.edgeCluster = [];
+		this.aspects;		
 		
-		//Moving settings
+		//MOVEMENT SETTINGS
 		this.p = new p5.Vector(random(windowWidth/2 - windowWidth/5, windowWidth/2 + windowWidth/5),random(windowHeight/2 - windowHeight/5,windowHeight/2 + windowHeight/5));
 		this.u = new p5.Vector(0,0);
 		this.f = new p5.Vector(0,0);
@@ -27,22 +22,33 @@ class Node{
 		this.damping = min(0.3, windowWidth/1920);
 		this.isFixed = false;
 
-		//Display settings
+		//DISPLAY SETTINGS
+		//set visibility
 		this.isHidden = false;
 		this.isSortYear = false;
 		this.isSortCont = false;
 		this.isSortType = false;
+		
+		//icon settings
+		this.typeIcon = typeIcon_;
+		this.iconSize = 25;
 
-		this.isHover = false;
+		//display attributes
 		this.d = 20;
 		this.color = random(50,255);
 		this.strokeWidth = 0.5;	
      	this.strokeColor = (200,200,200);
 
+		//set up edges
+		this.edgeCluster = [];
+
+		//hover and popup settings
+		this.isHover = false;
 		this.isExpand = false;
 		this.popUp = 0;
 	}
 
+	//CALC MOVEMENT STRENGTH
 	AddForceTo(sourceNode_, sourceStrength_){
 		let sourceNode = sourceNode_;
 		let sourceStrength = sourceStrength_;
@@ -56,6 +62,7 @@ class Node{
 		this.f = this.f.add(dv.div(dist).mult(sourceStrength));
 	}
 
+	//MOVE NODE POSITION
 	Move(){
 		// check fixed
 	    if (this.isFixed) return;
@@ -66,13 +73,9 @@ class Node{
 	    this.p = this.p.add(this.u.mult(this.dt));
 	}
 
+	//DISPLAY NODE
 	display(){
-		//expand info box
-
-		// if(this.isHidden){
-		// 	this.isExpand = false;
-		// }
-
+		//node display on select
 		if(this.isExpand){
 				strokeWeight(5);
 				noFill();
@@ -86,10 +89,10 @@ class Node{
 				text(this.name, this.p.x -textW/2, this.p.y -20);
 		}			
 		
+		//standard node display
 		push();
-
 		if(!this.isHidden){
-
+			//hover lineweight effects
 			if(this.isHover){
 				fill(255);
 				strokeWeight(5);
@@ -105,43 +108,24 @@ class Node{
 				text(this.name, this.p.x -textW/2, this.p.y -20);
 				pop();
 			}
+			//default lineweights
 			else{
 				strokeWeight(1);
 				stroke(50,200,200);
 			}
-
-			//sort Year test
+			//show node icon
 			push();
-
-			//Icon Display
 			fill(255);
 			image(this.typeIcon,this.p.x-(this.iconSize/2),this.p.y-(this.iconSize/2),this.iconSize,this.iconSize);
 			noStroke();
-
 			fill(255);
 			noStroke();
  			pop();
-			
-			//Circle display
-			// circle(this.p.x,this.p.y,this.d);
-
 		}
 		pop();
-
-		
 	}
 
-
-	toggleExpand(){
-		if(!this.isHidden && this.isExpand==false){
-			this.isExpand = true;
-		}
-		else{
-			this.isExpand = false;
-		}
-	}
-
-
+	//keep nodes in frame
 	checkEdges(xW, yH, width, height) {
 		if (this.p.x > width) {
 			this.p.x = width;
@@ -159,22 +143,6 @@ class Node{
 			this.u.y *= -1;
 		}
 	  }
-
-	description(){
-		textSize(12);
-        text('selected: ' + this.name,(this.p.x+this.d/2)+5, this.p.y);
-        text('by: ' + this.architect,(this.p.x+this.d/2)+5, this.p.y+15);
-        noStroke();
-        image(img, 650, 50, 100);
-        text(this.name, 650, 150);
-        text("architect: " + this.architect, 650,165);
-        textSize(10);
-        for(let i=0;i<this.aspectsStr.length;i++){
-            text(this.aspectsStr[i], 650, 190+(i*15)); 
-        }
-        textSize(8);
-        text(this.descript, 620, 195+(15*this.aspectsStr.length), 160, 500);
-	}
 }
 
 class Edge{
@@ -182,6 +150,8 @@ class Edge{
 		this.node = node_;
 		this.aspect = aspect_;
 	}
+
+	//Calc force between aspect and node for movement
 	ApplyForce(){
 		let dv = p5.Vector.sub(this.aspect.p, this.node.p);
 		let dist = dv.mag();
@@ -191,20 +161,13 @@ class Edge{
 		this.node.f =this.node.f.add(dv.mult(((0.5*dist)/100-0.5)));
 	}
 
+	//draw edge. display settings are set by cluster
 	display(){
 		if(!this.node.isHover){
-			//push();
 			strokeWeight(this.aspect.strokeWidth);
-			//pop();
-			
 		}
 		stroke(this.aspect.edgeColor);
 		line(this.node.p.x,this.node.p.y, this.aspect.p.x,this.aspect.p.y);
-		// push();
-		// noStroke();
-		// fill(this.aspect.edgeColor[0],this.aspect.edgeColor[1],this.aspect.edgeColor[2],100);
-		// ellipse(this.node.p.x,this.node.p.y, 30);
-		// pop();
 	}
 }
 
@@ -213,29 +176,30 @@ class EdgeCluster{
 		this.node = node_;
 		this.aspects = aspects_;
 		this.edges = [];
-		this.aspects.forEach(element => this.edges.push(new Edge(this.node, element)));
-		//display setting
 		this.isHover = false;
+
+		//create edges and collect into cluster
+		this.aspects.forEach(element => this.edges.push(new Edge(this.node, element)));
 	}
 
+	//edge display settings
 	display(){
 		if(!this.node.isHidden){
-		push();
-		if(this.isHover){
-			strokeWeight(3);			
-			stroke(255,255,255);
-
-		}else{
-			strokeWeight(0.5);
+			push();
+			if(this.isHover){
+				strokeWeight(3);			
+				stroke(255,255,255);
+			}else{
+				strokeWeight(0.5);
+			}
+			this.edges.forEach(edge => edge.display());
+			pop();
+		}else {
+			strokeWeight(0.1);
 		}
-		this.edges.forEach(edge => edge.display());
-		pop();
-	}else {
-		strokeWeight(0.1);
-		
 	}
 
-}
+	//add up edge forces
 	ApplyForce(){
 		this.edges.forEach(edge => edge.ApplyForce());
 	}
@@ -256,51 +220,40 @@ class Aspect{
 		this.colorDrag = [255,255,50];	
 		this.strokeWidth = 0.5;	
      	this.strokeColor = (200,200,200);
-		
 		this.edgeColor = this.colorIdle;
 		this.sine = 0;
+		this.sine2 = 0;
 	}
 
+	//DISPLAY ASPECT
 	display(){
-
+		//keep within frame
 		if (this.p.x > canvasXW-50) {
 			this.p.x = canvasXW-50;
 		} else if (this.p.x < 50) {
 			this.p.x = 50;
 		}
-	 
 		if (this.p.y > canvasYH - 50) {
 			this.p.y = canvasYH - 50;
 		}else if (this.p.y < 50){
 			this.p.y = 50;
 		}
-	  
-		push();
 
-		fill(255);
-		noStroke();
-
-
-    
+		//when node is clicked on/dragged
 		if(this.isDrag){
+			//update location to mouse
 			this.p.x = mouseX;
 			this.p.y = mouseY;
-			// fill(this.colorDrag[0],this.colorDrag[1],this.colorDrag[2]);
 
-
+			//highlight aspect, send out color wave
 			stroke(this.colorIdle);
-			strokeWeight(0.5);
+			strokeWeight(1.5);
 			fill(0,0,0,0);
-			circle(this.p.x, this.p.y, this.d+this.sine);
-			this.sine++;
-			fill(this.colorIdle);
-
-		}else{
-			// fill(this.colorIdle[0],this.colorIdle[1],this.colorIdle[2]);
-			fill(0);
-			
+			circle(this.p.x, this.p.y, (this.d+this.sine2)/1.25);
+			this.sine2++;
 		}
 
+		//on hover, highlight and send color wave
 		push();
 		if(this.isHover){
 			this.strokeWidth= 2;
@@ -310,7 +263,6 @@ class Aspect{
 			circle(this.p.x, this.p.y, this.d+this.sine);
 			this.sine++;
 		}
-
 		else{
 			this.edgeColor = this.colorIdle;
 			this.strokeWidth= 0.5;
@@ -318,10 +270,8 @@ class Aspect{
 		}
 		pop();
 
-
-		//stroke(255);
+		//default display gradient
 		noStroke();
-		//fill(this.colorIdle);
 		fill(this.colorIdle[0],this.colorIdle[1],this.colorIdle[2], 20);
 		circle(this.p.x,this.p.y, this.d*2);
 		fill(this.colorIdle[0],this.colorIdle[1],this.colorIdle[2], 70);
@@ -331,8 +281,8 @@ class Aspect{
 		circle(this.p.x,this.p.y, this.d/1.25);
 		circle(this.p.x,this.p.y, this.d/1.35);
 		circle(this.p.x,this.p.y, this.d/1.5);
-
 		
+		//hover, larger circle backdrop
 		push();
 		if(this.isHover){
 			fill(this.colorIdle[0],this.colorIdle[1],this.colorIdle[2], 50);
@@ -344,15 +294,12 @@ class Aspect{
 		}
 		pop();
 
-		//relocat text on aspect to center of bubble
+		//relocate text on aspect to center of bubble
 		let textW = textWidth(this.name);
 		stroke(0);
 		fill(255);
 		textSize(12);
-		//text(this.name, this.p.x - (textW/2 -2), this.p.y - 25);
 		text(this.name.toUpperCase(), this.p.x - (textW/2 +5), this.p.y + 3);
-		pop();
-
 		}
 	}
 
@@ -372,14 +319,11 @@ class Popup_v2{
 		this.div.parent(this.container);
 		this.div.class('popup');
 	
-		//popup fill content
+		//popup html fill content
 		this.pfill= "<span id='close' onclick='this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode); return false;'>x</span><h1>"+ this.node.name + "</h1><h3>" + this.node.architect + "</h3><h3>" + this.node.location + ", " + this.node.year + "</h3><img src='" + this.node.imgUrl + "'/><p>" + this.node.descript + "</p>";
 
 		this.div.html(this.pfill);
 	}
-
-	
-
 
 	updatePopup(){
 		this.container.hide();

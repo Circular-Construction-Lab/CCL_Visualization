@@ -36,49 +36,28 @@ button:hover {
 
 
 
-/* checkbox styling, in progress */
-
-.checkbox {
-  padding: 0px 0px 5px 10px;
-  font-size: 8pt;
-}
 
 
-input[type="checkbox"]{
-  background-color:rgb(61, 61, 61);
-  margin: 0;
-  margin: 1px 4px 1px 0px;
-  font: inhereit;
-  width: 0.75em;
-  height:0.75em;
-  transform: translateY(0.15em);
-}
-
-input[type="checkbox"]:hover{
-  /* background-color:rgb(150,150,150); */
-}
-
-
+/*PAGE LAYOUT AND STYLING*/
+/* main container div */
 #container {
   width:100%;
   height:100%;
   overflow: hidden;
-  /* background-color: black; */
 }
 
+/* Left-hand sort bar */
 #vizsort {
   float: left;
   width:150px;
   height:100%;
-
   padding: 25px;
   margin: 0;
   overflow: hidden;
   line-height: 5pt;
   text-transform:uppercase;
-
 }
-
+/* Right-hand popup space */
 #info {
   float: right;
   width: 250px;
@@ -89,7 +68,6 @@ input[type="checkbox"]:hover{
   margin:0;
   align-content: center;
 }
-
 
 .slider {
   color: white;
@@ -124,22 +102,17 @@ a {
   height: 300px;
   background-color: none;
   overflow-y: scroll;
-  /* padding: 5px 20px 10px 15px; */
   color: white;
   font-family: Helvetica, Arial, sans-serif;
   hyphens: auto;
-  /* border: 2px solid rgb(150,150,150); */
-
 }
-
-
+/* name */
 h1 {
   font-size: 16px;
   font-weight: 600;
   line-height: 20px;
 }
-
-
+/* architect, location */
 h3 {
   font-size: 12px;
   font-weight:lighter;
@@ -148,6 +121,7 @@ h3 {
   line-height: 12px;
 }
 
+/* close button */
 #close {
   align-content: center;
   float: right;
@@ -162,6 +136,29 @@ h3 {
   background:rgb(50, 50, 50)
 }
 
+
+/* CHECKBOX STYLING */
+
+.checkbox {
+  padding: 0px 0px 5px 10px;
+  font-size: 8pt;
+}
+
+input[type="checkbox"]{
+  background-color:rgb(61, 61, 61);
+  margin: 0;
+  margin: 1px 4px 1px 0px;
+  font: inhereit;
+  width: 0.75em;
+  height:0.75em;
+  transform: translateY(0.15em);
+}
+
+input[type="checkbox"]:hover{
+  background-color:rgb(150,150,150);
+}
+
+
 /* CUSTOM SCROLLBAR
 /* width */
 ::-webkit-scrollbar {
@@ -169,7 +166,6 @@ h3 {
 }
 
 /* Track */
-
 ::-webkit-scrollbar-track {
   background: rgb(50, 50, 50); 
 }

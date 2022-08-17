@@ -23,26 +23,23 @@ let typeStrs = ['project', 'tool', 'publication', 'strategy'];
 
 let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
 
-
 //pop-up box and array
 let pid = 0;
 let popUp;
 let popUps = [];
 
+//slider display
 var inputLeft;
 var inputRight;
 var thumbLeft;
 var thumbRight;
 var range;
 
-
-
 function initializeCanvas() {
 	// createCanvas
 	canvasXW=windowWidth;
 	canvasYH=windowHeight;
 	canvas = createCanvas(canvasXW, canvasYH);
-
 
   	// Slider with 2 Handles
 	inputLeft = document.getElementById("input-left");
@@ -56,20 +53,18 @@ function initializeCanvas() {
 
 function preload() {
 
+	//LOAD DATABASE
 	table = loadTable('assets/Database_6_07.csv', 'csv', 'header');
 
-	
 	// load Icons
 	for(i = 0; i < typeStrs.length; i ++){
-		types.push(new Type(typeStrs[i], loadImage('assets/icon6/type'+i+'.png')));
+		types.push(new Type(typeStrs[i], loadImage('assets/icons/type'+i+'.png')));
 	}
-
-
 }
 
 
 function setup() {
-	canvasbg = loadImage('assets/star-bg3.png');
+	canvasbg = loadImage('assets/star-bg.png');
 
 	initializeCanvas();
 	initializeAspects();
@@ -81,18 +76,16 @@ function setup() {
 	initializeCheckboxType();
 	initializeSelectButton();
 
+	//set everything as selected
 	checkEventCon();
 	checkEventType();
 	
-
 }
-
 
 function draw() {
 	windowResized();
 	background(0);
 	image(canvasbg,0,0);
-
 
 	updateNodes();
 	hover();
@@ -109,7 +102,7 @@ function draw() {
 	checkHidden();
 }
 
-
+//prevent aspects from stacking ontop
 function noStack(){
 	aspects.forEach(function(aspect0){
 		aspects.forEach(function(aspect1){
@@ -123,6 +116,8 @@ function noStack(){
 	});
 }
 
+//CHECKBOX SORTING FUNCTIONS
+//read continent boxes
 function checkEventCon() {
 	checkboxsCon.forEach(function (checkbox) {
 		if (checkbox.checked()) {
@@ -133,6 +128,7 @@ function checkEventCon() {
 	});
 }
 
+//read type boxes
 function checkEventType() {
 	checkboxsType.forEach(function (type) {
 		if (type.checked()) {
@@ -143,6 +139,7 @@ function checkEventType() {
 	});
 }
 
+//check all boxes then read
 function selectAllCheckboxes(){
 	console.log('select');
 	checkboxsCon.forEach(checkbox => checkbox.checked(true));
@@ -152,6 +149,7 @@ function selectAllCheckboxes(){
 	checkEventType();
 }
 
+//uncheck all boxes then read
 function clearSelection(){
 	console.log('clear');
 	checkboxsCon.forEach(checkbox => checkbox.checked(false));
@@ -161,12 +159,12 @@ function clearSelection(){
 	checkEventType();
 }
 
+//setup sort and test buttons
 function initializeSelectButton(){
 	let p = createP('<br>');
 	p.parent('vizsort');
 	buttonAll = createButton('select all');
 	buttonClear = createButton('clear selection');
-
 
 	buttonAll.parent('vizsort');
 	buttonClear.parent('vizsort');
@@ -181,17 +179,15 @@ function initializeSelectButton(){
 	tempButton.parent('vizsort');
 	let formButton = createButton('<a href="https://forms.gle/FZEA2GpuWxDxZUh87">add a project</a>');
 	formButton.parent('vizsort');
-
 }
 
+//CUSTOM SLIDER FUNCTIONS - not working??
 function initializeSlider() {
   
-
 	let p = createP('<br>By Year');
 	p.parent('vizsort');
 
 	slider = createSlider(1900, 2020, 1900);
-
 	
 	setLeftValue();
 	setRightValue();
@@ -200,18 +196,15 @@ function initializeSlider() {
 // 	pYearStart.position(15, 30);
 
 	pYearStart.parent('vizsort');
-
 	
 	pYearEnd = createP(2020);
 // 	pYearEnd.position(160, 30);
 	pYearEnd.parent('vizsort');
-  
 
 // 	slider.class('slider');
 // 	pYearEnd.class('slider');
 // 	pYearStart.class('slider');
 
-	
 	// //P5 Solution
 	// slider = createSlider(1900, 2020, 1900);
 	// slider.position(35, 10);
@@ -228,7 +221,6 @@ function initializeSlider() {
 	// // pYearStart.class('slider');
 
 }
-
 
 function setLeftValue() {
 	var _this = inputLeft,
@@ -286,7 +278,6 @@ inputRight.addEventListener("mouseup", function() {
 });
 
 
-
 function initializeCheckboxCon() {
 	let p = createP('<br><br><br>By Location:');
 	p.parent('vizsort');
@@ -297,8 +288,6 @@ function initializeCheckboxCon() {
 		checkbox.parent("vizsort");
     // checkbox.class('checkmarkCon');
 	});
-
-
 }
 
 function initializeCheckboxType() {
@@ -311,8 +300,6 @@ function initializeCheckboxType() {
 		checkbox.parent("vizsort");
     // checkbox.class('checkmarkType');
 	});
-
-
 }
 
 function sortYear(yearStart_, yearEnd_) {
@@ -324,6 +311,7 @@ function sortYear(yearStart_, yearEnd_) {
 		}
 	});
 }
+
 function sortContinent(continents_) {
 	nodes.forEach(function (node) {
 		if (!continents_.includes(node.continent)) {
@@ -344,7 +332,6 @@ function sortType(types_) {
 	});
 }
 
-
 function displaySliderYear() {
 	pYearStart.html(inputLeft.value);
 	pYearEnd.html(inputRight.value);
@@ -361,7 +348,7 @@ function checkHidden() {
 	});
 }
 
-
+//check and set hover mode for nodes and aspects
 function hover() {
 	for (let i = 0; i < nodes.length; i++) {
 		if (overElement(nodes[i].p.x, nodes[i].p.y, nodes[i].d)) {
@@ -373,7 +360,6 @@ function hover() {
 			nodes[i].edgeCluster.isHover = false;
 		}
 	}
-
 	for (let a = 0; a < aspects.length; a++) {
 		if (overElement(aspects[a].p.x, aspects[a].p.y, aspects[a].d)) {
 			aspects[a].isHover = true;
@@ -382,10 +368,9 @@ function hover() {
 			aspects[a].isHover = false;
 		}
 	}
-
 }
 
-//called when mouse is pressed to drag an aspect
+//checks and sets click and drag modes for nodes and aspects
 function mousePressed() {
 
 	for (let i = 0; i < aspects.length; i++) {
@@ -418,7 +403,7 @@ function mousePressed() {
 
 }
 
-//called when mouse released to set the aspect in new location
+//releases aspect if dragged
 function mouseReleased() {
 	for (let i = 0; i < aspects.length; i++) {
 		if (overElement(aspects[i].p.x, aspects[i].p.y, aspects[i].d / 2)) {
@@ -427,6 +412,7 @@ function mouseReleased() {
 	}
 }
 
+//checks if mouse location is over something
 function overElement(x_, y_, d_) {
 	if (dist(x_, y_, mouseX, mouseY) < d_) {
 		return true;
@@ -436,25 +422,28 @@ function overElement(x_, y_, d_) {
 	}
 }
 
+//move and locate all nodes
 function updateNodes() {
 	//enable movements
 	nodes.forEach(node => node.Move());
 
   //boundary
 	nodes.forEach(node => node.checkEdges(50, 50, canvasXW-50, canvasYH-50));
-// 	nodes.forEach(node => node.checkEdges(canvasPadding, canvasPadding, windowWidth, windowHeight));
+	// 	nodes.forEach(node => node.checkEdges(canvasPadding, canvasPadding, windowWidth, windowHeight));
   
 	//repel from other nodes
 	nodes.forEach(node => repel(node));
 	edgeClusters.forEach(edgeCluster => edgeCluster.ApplyForce());
 }
 
+//keep nodes from stacking
 function repel(node) {
 	let nodesRepelFrom = nodes.filter(element => element != node);
 	//here Control repel force
 	nodesRepelFrom.forEach(element => node.AddForceTo(element, -5));
 }
 
+//creates nodes from database
 function initializeNodes() {
 	let rows = table.getArray();
 
@@ -482,22 +471,23 @@ function initializeNodes() {
 	
 }
 
+//creates all aspects from string list
 function initializeAspects() {
 	
 	// let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
 
-		let colorIds = [];
-		colorIds.push([100,150,255]);
-		colorIds.push([69,168,81]);
-		colorIds.push([249,143,64]);
-		colorIds.push([245,160,205]);
-		colorIds.push([190,103,247]);
-		colorIds.push([255,103,109]);
-		colorIds.push([95,209,196]);
-		colorIds.push([246,13,71]);
-		colorIds.push([231,73,145]);
-		colorIds.push([232,232,52]);
-
+	//aspect colors
+	let colorIds = [];
+	colorIds.push([100,150,255]);
+	colorIds.push([69,168,81]);
+	colorIds.push([249,143,64]);
+	colorIds.push([245,160,205]);
+	colorIds.push([190,103,247]);
+	colorIds.push([255,103,109]);
+	colorIds.push([95,209,196]);
+	colorIds.push([246,13,71]);
+	colorIds.push([231,73,145]);
+	colorIds.push([232,232,52]);
 	
 	//calculate aspect locations
 	n = aspectStrs.length;
@@ -510,13 +500,14 @@ function initializeAspects() {
 	//unsure what canvaspadding was?
 	let canvasPadding = 200;
 
+	//starting aspect locations
 	for(let a =0;a<aspectStrs.length;a++){
 			aspects.push(new Aspect(aspectStrs[a],colorIds[a]));
       aspects[a].p = new p5.Vector(width/2 + points[a].x * (height-canvasPadding)/2,height/2 - points[a].y * (height-canvasPadding)/2);
 		}
-
 }
 
+//create edge clusters between nodes and aspects
 function initializeEdges() {
 	nodes.forEach(function (node) {
 		node.edgeCluster = new EdgeCluster(node, node.aspects);
@@ -524,33 +515,28 @@ function initializeEdges() {
 	});
 }
 
-
+//DISPLAY FUNCTIONS
 function displayEdgeClusters() {
 	edgeClusters.forEach(edgeCluster => edgeCluster.display());
 }
-
 function displayNodes() {
 	nodes.forEach(node => node.display());
 }
-
 function displayAspects() {    
-
-	
 	aspects.forEach(aspect => aspect.display());
 }
 
+//match aspects
 function findAspects(aspectsToFind) {
 	aspectsFound = [];
 	aspectsToFind.forEach(aspect => aspectsFound.push(aspects.find(element => element.name == aspect)));
 	return aspectsFound;
 }
 
+//reset canvas to window if resized
 function windowResized(){
-
 	canvasXW=windowWidth;
 	canvasYH=windowHeight;
 	resizeCanvas(canvasXW, canvasYH);
 	canvas.position(0,0);
-
-
 }
