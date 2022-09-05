@@ -25,6 +25,10 @@ The application is structured in following structure
 
 ### Assets
 
+#### Icons
+
+#### Database.csv
+
 ### Static
 
 #### Sketch.js
