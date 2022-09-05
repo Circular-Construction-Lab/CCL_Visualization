@@ -1,6 +1,8 @@
 let canvas;
 let canvasXW;
 let canvasYH;
+let canvasbg;
+
 let nodes = [];
 let aspects = [];
 let edgeClusters = [];
@@ -26,24 +28,12 @@ let continentStrs = [
 
 let typeStrs = ["project", "tool", "publication", "strategy"];
 
-let aspectStrs = [
-	"water",
-	"site",
-	"digitalization",
-	"fabrication",
-	"people",
-	"health",
-	"technical metabolism",
-	"circular economy",
-	"biological metabolism",
-	"energy",
-];
-
 //pop-up box and array
 let pid = 0;
 let popUp;
 let popUps = [];
 
+//slider display
 var inputLeft;
 var inputRight;
 var thumbLeft;
@@ -61,16 +51,17 @@ function initializeCanvas() {
 function preload() {
 	table = loadTable("assets/Database_6_07.csv", "csv", "header");
 
-	// load Icons
+	//LOAD DATABASE
+	table = loadTable('assets/Database_6_07.csv', 'csv', 'header');
 
+	// load Icons
 	for (i = 0; i < typeStrs.length; i++) {
-		types.push(
-			new Type(typeStrs[i], loadImage("assets/icon4/type" + i + ".png"))
-		);
+		types.push(new Type(typeStrs[i], loadImage('assets/icons/type' + i + '.png')));
 	}
 }
 
 function setup() {
+	canvasbg = loadImage('assets/star-bg.png');
 
 	initializeCanvas();
 	initializeAspects();
@@ -82,14 +73,16 @@ function setup() {
 	initializeCheckboxType();
 	initializeSelectButton();
 
+	//set everything as selected
 	checkEventCon();
 	checkEventType();
-}
 
+}
 
 function draw() {
 	windowResized();
 	background(0);
+	image(canvasbg, 0, 0);
 
 	updateNodes();
 	hover();
@@ -106,8 +99,8 @@ function draw() {
 	checkHidden();
 }
 
+//prevent aspects from stacking ontop
 function noStack() {
-	// for between aspects
 	aspects.forEach(function (aspect0) {
 		aspects.forEach(function (aspect1) {
 			if (aspect0 != aspect1) {
@@ -124,20 +117,22 @@ function noStack() {
 		});
 	});
 	// for between nodes and aspects
-	nodes.forEach(function (node){
-		aspects.forEach(function(aspect){
+	nodes.forEach(function (node) {
+		aspects.forEach(function (aspect) {
 			//Calculate force between aspect and node
 			let dv = p5.Vector.sub(aspect.p, node.p);
 			let dist = dv.mag();
 			dv.normalize();
-			
-			if(dist<aspect.d){
-				node.f =node.f.add(dv.mult(-1));
+
+			if (dist < aspect.d) {
+				node.f = node.f.add(dv.mult(-1));
 			}
 		});
 	});
 }
 
+//CHECKBOX SORTING FUNCTIONS
+//read continent boxes
 function checkEventCon() {
 	checkboxsCon.forEach(function (checkbox) {
 		if (checkbox.checked()) {
@@ -150,6 +145,7 @@ function checkEventCon() {
 	});
 }
 
+//read type boxes
 function checkEventType() {
 	checkboxsType.forEach(function (type) {
 		if (type.checked()) {
@@ -160,49 +156,49 @@ function checkEventType() {
 	});
 }
 
+//check all boxes then read
 function selectAllCheckboxes() {
-	console.log("select");
-	checkboxsCon.forEach((checkbox) => checkbox.checked(true));
-	checkboxsType.forEach((checkbox) => checkbox.checked(true));
+	console.log('select');
+	checkboxsCon.forEach(checkbox => checkbox.checked(true));
+	checkboxsType.forEach(checkbox => checkbox.checked(true));
 	//check check status again
 	checkEventCon();
 	checkEventType();
 }
 
+//uncheck all boxes then read
 function clearSelection() {
-	console.log("clear");
-	checkboxsCon.forEach((checkbox) => checkbox.checked(false));
-	checkboxsType.forEach((checkbox) => checkbox.checked(false));
+	console.log('clear');
+	checkboxsCon.forEach(checkbox => checkbox.checked(false));
+	checkboxsType.forEach(checkbox => checkbox.checked(false));
 	//check check status again
 	checkEventCon();
 	checkEventType();
 }
 
+//setup sort and test buttons
 function initializeSelectButton() {
-	let p = createP("<br>");
-	p.parent("vizsort");
-	buttonAll = createButton("select all");
-	buttonClear = createButton("clear selection");
+	let p = createP('<br>');
+	p.parent('vizsort');
+	buttonAll = createButton('select all');
+	buttonClear = createButton('clear selection');
 
-	buttonAll.parent("vizsort");
-	buttonClear.parent("vizsort");
+	buttonAll.parent('vizsort');
+	buttonClear.parent('vizsort');
 
-	buttonAll.class("button");
-	buttonClear.class("button");
+	buttonAll.class('button');
+	buttonClear.class('button');
 
 	buttonAll.mousePressed(selectAllCheckboxes);
 	buttonClear.mousePressed(clearSelection);
 
-	let tempButton = createButton(
-		'<a href="readTest.html">test database content</a>'
-	);
-	tempButton.parent("vizsort");
-	let formButton = createButton(
-		'<a href="https://forms.gle/FZEA2GpuWxDxZUh87">add a project</a>'
-	);
-	formButton.parent("vizsort");
+	let tempButton = createButton('<a href="readTest.html">test database content</a>');
+	tempButton.parent('vizsort');
+	let formButton = createButton('<a href="https://forms.gle/FZEA2GpuWxDxZUh87">add a project</a>');
+	formButton.parent('vizsort');
 }
 
+//CUSTOM SLIDER FUNCTIONS - not working??
 function initializeSlider() {
 	let p = createP("By Year");
 	p.parent("vizsort");
@@ -214,8 +210,8 @@ function initializeSlider() {
 
 	noUiSlider.create(slider, {
 		start: [1900, 2020],
-		tooltips: 
-			wNumb({decimals: 0}), // tooltip with custom formatting
+		tooltips:
+			wNumb({ decimals: 0 }), // tooltip with custom formatting
 		connect: true,
 		direction: 'rtl',
 		orientation: 'vertical',
@@ -235,6 +231,61 @@ function initializeSlider() {
 	// pYearEnd.parent("vizsort");
 
 }
+
+// function setLeftValue() {
+// 	var _this = inputLeft,
+// 		min = parseInt(_this.min),
+// 		max = parseInt(_this.max);
+
+// 	_this.value = Math.min(parseInt(_this.value), parseInt(inputRight.value) - 1);
+
+// 	var percent = ((_this.value - min) / (max - min)) * 100;
+
+// 	thumbLeft.style.left = percent + "%";
+// 	range.style.left = percent + "%";
+// }
+
+// function setRightValue() {
+// 	var _this = inputRight,
+// 		min = parseInt(_this.min),
+// 		max = parseInt(_this.max);
+
+// 	_this.value = Math.max(parseInt(_this.value), parseInt(inputLeft.value) + 1);
+
+// 	var percent = ((_this.value - min) / (max - min)) * 100;
+
+// 	thumbRight.style.right = (100 - percent) + "%";
+// 	range.style.right = (100 - percent) + "%";
+// }
+
+// inputLeft.addEventListener("input", setLeftValue);
+// inputRight.addEventListener("input", setRightValue);
+
+// inputLeft.addEventListener("mouseover", function() {
+// 	thumbLeft.classList.add("hover");
+// });
+// inputLeft.addEventListener("mouseout", function() {
+// 	thumbLeft.classList.remove("hover");
+// });
+// inputLeft.addEventListener("mousedown", function() {
+// 	thumbLeft.classList.add("active");
+// });
+// inputLeft.addEventListener("mouseup", function() {
+// 	thumbLeft.classList.remove("active");
+// });
+
+// inputRight.addEventListener("mouseover", function() {
+// 	thumbRight.classList.add("hover");
+// });
+// inputRight.addEventListener("mouseout", function() {
+// 	thumbRight.classList.remove("hover");
+// });
+// inputRight.addEventListener("mousedown", function() {
+// 	thumbRight.classList.add("active");
+// });
+// inputRight.addEventListener("mouseup", function() {
+// 	thumbRight.classList.remove("active");
+// });
 
 
 function initializeCheckboxCon() {
@@ -270,6 +321,7 @@ function sortYear(yearStart_, yearEnd_) {
 		}
 	});
 }
+
 function sortContinent(continents_) {
 	nodes.forEach(function (node) {
 		if (!continents_.includes(node.continent)) {
@@ -290,7 +342,6 @@ function sortType(types_) {
 	});
 }
 
-// Display year silider text info
 function displaySliderYear() {
 	// pYearStart.html(int(slider.noUiSlider.get()[0]));
 	// pYearEnd.html(int(slider.noUiSlider.get()[1]));
@@ -307,7 +358,7 @@ function checkHidden() {
 	});
 }
 
-// check if cursor is hovering on the node
+//check and set hover mode for nodes and aspects
 function hover() {
 	for (let i = 0; i < nodes.length; i++) {
 		if (overElement(nodes[i].p.x, nodes[i].p.y, nodes[i].d)) {
@@ -318,7 +369,6 @@ function hover() {
 			nodes[i].edgeCluster.isHover = false;
 		}
 	}
-
 	for (let a = 0; a < aspects.length; a++) {
 		if (overElement(aspects[a].p.x, aspects[a].p.y, aspects[a].d)) {
 			aspects[a].isHover = true;
@@ -328,7 +378,7 @@ function hover() {
 	}
 }
 
-//called when mouse is pressed to drag an aspect
+//checks and sets click and drag modes for nodes and aspects
 function mousePressed() {
 	for (let i = 0; i < aspects.length; i++) {
 		if (overElement(aspects[i].p.x, aspects[i].p.y, aspects[i].d / 2)) {
@@ -358,7 +408,7 @@ function mousePressed() {
 	}
 }
 
-//called when mouse released to set the aspect in new location
+//releases aspect if dragged
 function mouseReleased() {
 	for (let i = 0; i < aspects.length; i++) {
 		if (overElement(aspects[i].p.x, aspects[i].p.y, aspects[i].d / 2)) {
@@ -367,6 +417,7 @@ function mouseReleased() {
 	}
 }
 
+//checks if mouse location is over something
 function overElement(x_, y_, d_) {
 	if (dist(x_, y_, mouseX, mouseY) < d_) {
 		return true;
@@ -375,6 +426,7 @@ function overElement(x_, y_, d_) {
 	}
 }
 
+//move and locate all nodes
 function updateNodes() {
 	//enable movements
 	nodes.forEach((node) => node.Move());
@@ -385,20 +437,26 @@ function updateNodes() {
 	);
 	// 	nodes.forEach(node => node.checkEdges(canvasPadding, canvasPadding, windowWidth, windowHeight));
 
+	//boundary
+	nodes.forEach(node => node.checkEdges(50, 50, canvasXW - 50, canvasYH - 50));
+	// 	nodes.forEach(node => node.checkEdges(canvasPadding, canvasPadding, windowWidth, windowHeight));
+
 	//repel from other nodes
 	nodes.forEach((node) => repel(node));
 	edgeClusters.forEach((edgeCluster) => edgeCluster.ApplyForce());
 }
 
+//keep nodes from stacking
 function repel(node) {
 	let nodesRepelFrom = nodes.filter((element) => element != node);
 	//here Control repel force
 	nodesRepelFrom.forEach((element) => node.AddForceTo(element, -5));
 }
 
+//creates nodes from database
 function initializeNodes() {
 	let rows = table.getArray();
-	
+
 	// data refine
 	rows.forEach(function (row) {
 		let name_ = row[0].replaceAll('"', "");
@@ -436,9 +494,11 @@ function initializeNodes() {
 	nodes.forEach((node) => (node.aspects = findAspects(node.aspectsStr)));
 }
 
+//creates all aspects from string list
 function initializeAspects() {
 	// let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
 
+	//aspect colors
 	let colorIds = [];
 	colorIds.push([100, 150, 255]);
 	colorIds.push([69, 168, 81]);
@@ -471,6 +531,7 @@ function initializeAspects() {
 	}
 }
 
+//create edge clusters between nodes and aspects
 function initializeEdges() {
 	nodes.forEach(function (node) {
 		node.edgeCluster = new EdgeCluster(node, node.aspects);
@@ -478,18 +539,18 @@ function initializeEdges() {
 	});
 }
 
+//DISPLAY FUNCTIONS
 function displayEdgeClusters() {
 	edgeClusters.forEach((edgeCluster) => edgeCluster.display());
 }
-
 function displayNodes() {
 	nodes.forEach((node) => node.display());
 }
-
 function displayAspects() {
-	aspects.forEach((aspect) => aspect.display());
+	aspects.forEach(aspect => aspect.display());
 }
 
+//match aspects
 function findAspects(aspectsToFind) {
 	aspectsFound = [];
 	aspectsToFind.forEach((aspect) =>
@@ -498,9 +559,10 @@ function findAspects(aspectsToFind) {
 	return aspectsFound;
 }
 
+//reset canvas to window if resized
 function windowResized() {
-	canvasXW = windowWidth - 400;
+	canvasXW = windowWidth;
 	canvasYH = windowHeight;
 	resizeCanvas(canvasXW, canvasYH);
-	canvas.position(150, 0);
+	canvas.position(0, 0);
 }
