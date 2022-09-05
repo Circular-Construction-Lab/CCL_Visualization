@@ -34,10 +34,10 @@ The application is structured in following structure
 ### index.html
 
 ## Team Members:
-Leanna Humphrey
-Gabriella Kim
-Nusaibah Khan
-Haotian Ma
+Leanna Humphrey\
+Haotian Ma\
+Gabriella Kim\
+Nusaibah Khan\
 
 ## Version
 vers. 1.00
