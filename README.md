@@ -31,7 +31,9 @@ The application is structured in following structure
 
 #### Style.css
 
-### index.html
+### Templates
+
+#### index.html
 
 ## Team Members:
 Leanna Humphrey\
