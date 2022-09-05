@@ -1,6 +1,8 @@
 let canvas;
 let canvasXW;
 let canvasYH;
+let canvasbg;
+
 let nodes = [];
 let aspects = [];
 let edgeClusters = [];
@@ -52,25 +54,33 @@ var range;
 
 function initializeCanvas() {
 	// createCanvas
-	canvasXW = windowWidth - 400;
-	canvasYH = windowHeight;
+	canvasXW=windowWidth;
+	canvasYH=windowHeight;
 	canvas = createCanvas(canvasXW, canvasYH);
-	//canvas.position(150,0);
+
+
+  	// Slider with 2 Handles
+	inputLeft = document.getElementById("input-left");
+	inputRight = document.getElementById("input-right");
+
+	thumbLeft = document.querySelector(".slider > .thumb.left");
+	thumbRight = document.querySelector(".slider > .thumb.right");
+	range = document.querySelector(".slider > .range");
 }
 
 function preload() {
 	table = loadTable("assets/Database_6_07.csv", "csv", "header");
 
 	// load Icons
-
-	for (i = 0; i < typeStrs.length; i++) {
-		types.push(
-			new Type(typeStrs[i], loadImage("assets/icon4/type" + i + ".png"))
-		);
+	for(i = 0; i < typeStrs.length; i ++){
+		types.push(new Type(typeStrs[i], loadImage('assets/icon6/type'+i+'.png')));
 	}
+
+
 }
 
 function setup() {
+	canvasbg = loadImage('assets/star-bg3.png');
 
 	initializeCanvas();
 	initializeAspects();
@@ -90,6 +100,8 @@ function setup() {
 function draw() {
 	windowResized();
 	background(0);
+	image(canvasbg,0,0);
+
 
 	updateNodes();
 	hover();
@@ -498,9 +510,12 @@ function findAspects(aspectsToFind) {
 	return aspectsFound;
 }
 
-function windowResized() {
-	canvasXW = windowWidth - 400;
-	canvasYH = windowHeight;
+function windowResized(){
+
+	canvasXW=windowWidth;
+	canvasYH=windowHeight;
 	resizeCanvas(canvasXW, canvasYH);
-	canvas.position(150, 0);
+	canvas.position(0,0);
+
+
 }

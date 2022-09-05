@@ -15,7 +15,7 @@ class Node {
 
 		//Icon settings
 		this.typeIcon = typeIcon_;
-		this.iconSize = 20;
+		this.iconSize = 25;
 
 		this.edgeCluster = [];
 
@@ -191,12 +191,20 @@ class Edge {
 		this.node.f = this.node.f.add(dv.mult(((0.5 * dist) / 100 - 0.5)));
 	}
 
-	display() {
-		if (!this.node.isHover) {
+	display(){
+		if(!this.node.isHover){
+			//push();
 			strokeWeight(this.aspect.strokeWidth);
+			//pop();
+			
 		}
 		stroke(this.aspect.edgeColor);
-		line(this.node.p.x, this.node.p.y, this.aspect.p.x, this.aspect.p.y);
+		line(this.node.p.x,this.node.p.y, this.aspect.p.x,this.aspect.p.y);
+		// push();
+		// noStroke();
+		// fill(this.aspect.edgeColor[0],this.aspect.edgeColor[1],this.aspect.edgeColor[2],100);
+		// ellipse(this.node.p.x,this.node.p.y, 30);
+		// pop();
 	}
 }
 
@@ -243,7 +251,7 @@ class Aspect {
 		this.p = new p5.Vector(random(100, windowWidth - 300), random(100, windowHeight - 100));
 
 		//Display settings
-		this.d = 40;
+		this.d = 60;
 		this.colorIdle = colorIdle_;
 		this.colorDrag = [255, 255, 50];
 		this.strokeWidth = 0.5;
@@ -316,24 +324,38 @@ class Aspect {
 		pop();
 
 
-		stroke(255);
-		fill(this.colorIdle);
-		strokeWeight(2);
-		circle(this.p.x, this.p.y, this.d / 1.5);
+		//stroke(255);
+		noStroke();
+		//fill(this.colorIdle);
+		fill(this.colorIdle[0],this.colorIdle[1],this.colorIdle[2], 20);
+		circle(this.p.x,this.p.y, this.d*2);
+		fill(this.colorIdle[0],this.colorIdle[1],this.colorIdle[2], 70);
+		strokeWeight(0.5);
+		circle(this.p.x,this.p.y, this.d*1.25);
+		circle(this.p.x,this.p.y, this.d);
+		circle(this.p.x,this.p.y, this.d/1.25);
+		circle(this.p.x,this.p.y, this.d/1.35);
+		circle(this.p.x,this.p.y, this.d/1.5);
 
+		
 		push();
-		if (this.isHover) {
+		if(this.isHover){
+			fill(this.colorIdle[0],this.colorIdle[1],this.colorIdle[2], 50);
+			circle(this.p.x,this.p.y, this.d*5);
+		circle(this.p.x,this.p.y, this.d*2);
 			noStroke();
 			fill(0)
-			circle(this.p.x, this.p.y, this.d / 2);
+			circle(this.p.x, this.p.y, this.d);
 		}
 		pop();
 
-
+		//relocat text on aspect to center of bubble
 		let textW = textWidth(this.name);
 		stroke(0);
-		textSize(16);
-		text(this.name, this.p.x - (textW / 2 - 2), this.p.y - 25);
+		fill(255);
+		textSize(12);
+		//text(this.name, this.p.x - (textW/2 -2), this.p.y - 25);
+		text(this.name.toUpperCase(), this.p.x - (textW/2 +5), this.p.y + 3);
 		pop();
 
 	}
