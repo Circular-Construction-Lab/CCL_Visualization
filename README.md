@@ -37,7 +37,7 @@ The application is structured in following structure
 Leanna Humphrey\
 Haotian Ma\
 Gabriella Kim\
-Nusaibah Khan\
+Nusaibah Khan
 
 ## Version
 vers. 1.00
