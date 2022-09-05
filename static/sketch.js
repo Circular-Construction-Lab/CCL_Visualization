@@ -496,7 +496,7 @@ function initializeNodes() {
 
 //creates all aspects from string list
 function initializeAspects() {
-	// let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
+	let aspectStrs = ['water', 'site', 'digitalization', 'fabrication', 'people', 'health', 'technical metabolism', 'circular economy', 'biological metabolism','energy'];
 
 	//aspect colors
 	let colorIds = [];

@@ -311,7 +311,7 @@ class Aspect {
 		text(this.name.toUpperCase(), this.p.x - (textW / 2 + 5), this.p.y + 3);
 	}
 }
-}
+
 
 class Popup_v2 {
 	constructor(id_, node_) {
