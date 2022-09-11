@@ -203,10 +203,14 @@ function initializeSelectButton() {
 	let formButton = createButton('<a href="https://forms.gle/FZEA2GpuWxDxZUh87">add a project</a>');
 	formButton.parent('vizsort');
 
-	let fullScreenButton = createButton('<a href="index.html">full screen</a>');
+	let fullScreenButton = createButton('full screen');
 	fullScreenButton.parent('vizsort');
+	fullScreenButton.mousePressed(newWindow);
 }
 
+function newWindow(){
+	window.open("https://circular-construction-lab.github.io/CCL_Visualization/","_blank");
+}
 //CUSTOM SLIDER FUNCTIONS - not working??
 function initializeSlider() {
 	let p = createP("By Year");
