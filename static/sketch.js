@@ -198,8 +198,8 @@ function initializeSelectButton() {
 	buttonAll.mousePressed(selectAllCheckboxes);
 	buttonClear.mousePressed(clearSelection);
 
-	let tempButton = createButton('<a href="readTest.html">test database content</a>');
-	tempButton.parent('vizsort');
+	// let tempButton = createButton('<a href="readTest.html">test database content</a>');
+	// tempButton.parent('vizsort');
 	let formButton = createButton('<a href="https://forms.gle/FZEA2GpuWxDxZUh87">add a project</a>');
 	formButton.parent('vizsort');
 
