@@ -324,16 +324,8 @@ class Aspect {
 		text(this.name.toUpperCase(), this.p.x - (textW / 2 + 5), this.p.y + 3);
 	}
 
-	move(scrollPos,width,height){
+	move(scrollPos){
 
-		// aspects[a].p = new p5.Vector(
-		// 	width / 2 + (points[a].x * (height - canvasPadding)) / 2,
-		// 	height / 2 - (points[a].y * (height - canvasPadding)) / 2
-		// );
-		scrollPos = scrollPos;
-		scrollPos = Math.min(Math.max(scrollPos,-50),50);
-
-		console.log(scrollPos);
 		this.p.x += (this.vector.x * (scrollPos)) / 2;
 		this.p.y -= (this.vector.y * (scrollPos)) / 2;
 	}

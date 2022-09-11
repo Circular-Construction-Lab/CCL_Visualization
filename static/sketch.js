@@ -506,7 +506,7 @@ function findAspects(aspectsToFind) {
 
 // move Aspects
 function aspectMove(){
-	aspects.forEach(aspect => aspect.move(scrollPos,width,height));
+	aspects.forEach(aspect => aspect.move(scrollPos));
 }
 
 function windowResize(){
