@@ -59,8 +59,10 @@ class Node {
 		dv.normalize();
 
 		//Add force
+		if(dist!=0){
 		this.f = this.f.add(dv.div(dist).mult(sourceStrength));
 	}
+		}
 
 	//MOVE NODE POSITION
 	Move() {

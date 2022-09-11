@@ -468,7 +468,7 @@ function initializeAspects() {
 	}
 
 	//unsure what canvaspadding was?
-	let canvasPadding = 400*1000/width;
+	let canvasPadding = 200*1000/width;
 
 	for (let a = 0; a < aspectStrs.length; a++) {
 		aspects.push(new Aspect(aspectStrs[a], colorIds[a]));
