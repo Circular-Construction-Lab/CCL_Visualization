@@ -10,22 +10,22 @@ slider-styled,
 }
 
 #slider-round {
-  left:10px;
-  top: 15px;
+  left:11px;
+  top: 10px;
   height: 120px;
-  width:8px;
+  width:5px;
 }
 
 #slider-round .noUi-connect {
-  background: #2de0ff;
+  background: #2162ca;
 }
 
 #slider-round .noUi-handle {
-  height: 18px;
+  height: 10px;
   width: 18px;
-  left: -12px;
-  bottom: -6px;
-  border-radius: 9px;
+  left: -10px;
+  bottom: -1px;
+  border-radius: 0px;
 }
 
 html, body {
@@ -65,9 +65,6 @@ button:hover {
 }
 
 
-
-
-
 /*PAGE LAYOUT AND STYLING*/
 /* main container div */
 #container {
@@ -78,8 +75,9 @@ button:hover {
 
 /* Left-hand sort bar */
 #vizsort {
+  background-color: rgba(0,0,0,0.2);
   float: left;
-  width:150px;
+  width:120px;
   height:100%;
   padding: 25px;
   margin: 0;
@@ -130,7 +128,7 @@ a {
   margin: 10px 20px 0px 0px;
   padding: 20px;
   height: 300px;
-  background-color: none;
+  background-color: rgba(0,0,0,0.2);
   overflow-y: scroll;
   color: white;
   font-family: Helvetica, Arial, sans-serif;
@@ -180,7 +178,7 @@ input[type="checkbox"]{
   margin: 1px 4px 1px 0px;
   font: inhereit;
   width: 0.75em;
-  height:0.75em;
+  height:0.5em;
   transform: translateY(0.15em);
 }
 
@@ -188,127 +186,11 @@ input[type="checkbox"]:hover{
   background-color:rgb(150,150,150);
 }
 
-
-/* CUSTOM SCROLLBAR
-/* width */
-::-webkit-scrollbar {
-  width: 5px;
+.not-selectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: rgb(50, 50, 50); 
-}
-  
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #a7a7a7; 
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: rgb(194, 194, 194); 
-} 
-
-/* .middle {
-	transform: translate(10px, 20px);
-	position: absolute;
-	width: 100%;
-	max-width: 190px;
-}
-
-.slider {
-	position: relative;
-	z-index: 1;
-	height: 10px;
-	margin: 0 15px;
-}
-.slider > .track {
-	position: absolute;
-	z-index: 1;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	border-radius: 5px;
-	background-color: #c6aee7;
-}
-.slider > .range {
-	position: absolute;
-	z-index: 2;
-	left: 25%;
-	right: 25%;
-	top: 0;
-	bottom: 0;
-	border-radius: 5px;
-	background-color: #6200ee;
-}
-
-.slider > .thumb {
-	position: absolute;
-	z-index: 3;
-	width: 20px;
-	height: 20px;
-	background-color: #6200ee;
-	border-radius: 50%;
-	box-shadow: 0 0 0 0 rgba(98,0,238,.1);
-	transition: box-shadow .3s ease-in-out;
-}
-.slider > .thumb.left {
-	left: 25%;
-	transform: translate(-10px, -5px);
-}
-.slider > .thumb.right {
-	right: 25%;
-	transform: translate(10px, -5px);
-}
-.slider > .thumb.hover {
-	box-shadow: 0 0 0 5px rgba(98,0,238,.1);
-}
-.slider > .thumb.active {
-	box-shadow: 0 0 0 10px rgba(98,0,238,.2);
-}
-
-input[type=range] {
-	position: absolute;
-	pointer-events: none;
-	-webkit-appearance: none;
-	z-index: 2;
-	height: 10px;
-	width: 100%;
-	opacity: 0;
-}
-input[type=range]::-webkit-slider-thumb {
-	pointer-events: all;
-	width: 20px;
-	height: 20px;
-	border-radius: 0;
-	border: 0 none;
-	background-color: red;
-	-webkit-appearance: none;
-} */
-
-
-/* .checkmarkCon {
-  position: relative;
-  top: 2vh;
-  left: 5%;
-  height: 25px;
-  width: 200px;
-}
-.checkmarkType {
-  position: relative;
-  top: 5vh;
-  left: 5%;
-  height: 25px;
-  width: 200px;
-}
-
-.button {
-  position: relative;
-  top: 90%;
-  left: 5%;
-  height: 25px;
-  margin: 3px;
-  width: 180px;
-} */

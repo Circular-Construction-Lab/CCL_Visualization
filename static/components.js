@@ -76,7 +76,7 @@ class Node {
 	//DISPLAY NODE
 	display() {
 		//node display on select
-		if (this.isExpand) {
+		if (this.isExpand && !this.isHidden) {
 			strokeWeight(5);
 			noFill();
 			stroke(225);
@@ -100,11 +100,18 @@ class Node {
 				ellipse(this.p.x, this.p.y, 20);
 				strokeWeight(3);
 				stroke(220, 220, 220);
+
 				push();
 				noStroke();
-				fill(255, 255, 255);
-				textSize(12);
 				let textW = textWidth(this.name);
+
+				fill('rgba(255,255,255,0.2)');
+				rect(this.p.x - textW / 2-10, this.p.y - 40,textW+20,30,5);
+
+				pop();
+				push()
+				noStroke();
+				textSize(12);
 				text(this.name, this.p.x - textW / 2, this.p.y - 20);
 				pop();
 			}
@@ -215,6 +222,7 @@ class Aspect {
 		this.name = name_;
 		this.isDrag = false;
 		this.isHover = false;
+		this.vector = 0;
 
 		//Location
 		this.p = new p5.Vector(random(100, windowWidth - 300), random(100, windowHeight - 100));
@@ -315,6 +323,20 @@ class Aspect {
 		textSize(12);
 		text(this.name.toUpperCase(), this.p.x - (textW / 2 + 5), this.p.y + 3);
 	}
+
+	move(scrollPos,width,height){
+
+		// aspects[a].p = new p5.Vector(
+		// 	width / 2 + (points[a].x * (height - canvasPadding)) / 2,
+		// 	height / 2 - (points[a].y * (height - canvasPadding)) / 2
+		// );
+		scrollPos = scrollPos;
+		scrollPos = Math.min(Math.max(scrollPos,-50),50);
+
+		console.log(scrollPos);
+		this.p.x += (this.vector.x * (scrollPos)) / 2;
+		this.p.y -= (this.vector.y * (scrollPos)) / 2;
+	}
 }
 
 
@@ -341,7 +363,14 @@ class Popup_v2 {
 	}
 
 	updatePopup() {
+		if(this.node.isHidden){
+			this.hidePopup();
+		}
+	}
+
+	hidePopup(){
 		this.container.hide();
+		this.node.isExpand = false;
 	}
 
 }

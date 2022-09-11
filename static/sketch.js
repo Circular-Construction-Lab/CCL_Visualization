@@ -40,6 +40,9 @@ var thumbLeft;
 var thumbRight;
 var range;
 
+// scroll check
+let scrollPos = 0;
+
 function initializeCanvas() {
 	// createCanvas
 	canvasXW = windowWidth ;
@@ -49,7 +52,6 @@ function initializeCanvas() {
 }
 
 function preload() {
-	table = loadTable("assets/Database_6_07.csv", "csv", "header");
 
 	//LOAD DATABASE
 	table = loadTable('assets/Database_6_07.csv', 'csv', 'header');
@@ -80,7 +82,7 @@ function setup() {
 }
 
 function draw() {
-	windowResized();
+	windowResize();
 	background(0);
 	image(canvasbg, 0, 0);
 
@@ -93,10 +95,14 @@ function draw() {
 	displayNodes();
 	displaySliderYear();
 
+	aspectMove();
+
 	sortYear(slider.noUiSlider.get()[0], slider.noUiSlider.get()[1]);
 	sortContinent(continentSelected);
 	sortType(typeSelected);
 	checkHidden();
+	checkPopupHidden();
+
 }
 
 //prevent aspects from stacking ontop
@@ -116,7 +122,7 @@ function noStack() {
 			}
 		});
 	});
-	// for between nodes and aspects
+	// force between nodes and aspects
 	nodes.forEach(function (node) {
 		aspects.forEach(function (aspect) {
 			//Calculate force between aspect and node
@@ -178,7 +184,7 @@ function clearSelection() {
 
 //setup sort and test buttons
 function initializeSelectButton() {
-	let p = createP('<br>');
+	let p = createP('');
 	p.parent('vizsort');
 	buttonAll = createButton('select all');
 	buttonClear = createButton('clear selection');
@@ -196,6 +202,9 @@ function initializeSelectButton() {
 	tempButton.parent('vizsort');
 	let formButton = createButton('<a href="https://forms.gle/FZEA2GpuWxDxZUh87">add a project</a>');
 	formButton.parent('vizsort');
+
+	let fullScreenButton = createButton('<a href="index.html">full screen</a>');
+	fullScreenButton.parent('vizsort');
 }
 
 //CUSTOM SLIDER FUNCTIONS - not working??
@@ -204,9 +213,7 @@ function initializeSlider() {
 	p.parent("vizsort");
 	p.parent("top");
 
-
 	slider = document.getElementById("slider-round");
-	console.log(slider);
 
 	noUiSlider.create(slider, {
 		start: [1900, 2020],
@@ -215,81 +222,18 @@ function initializeSlider() {
 		connect: true,
 		direction: 'rtl',
 		orientation: 'vertical',
-		margin: 5,
+		margin: 1,
 		range: {
 			'min': 1900,
 			'max': 2020
 		}
 	});
-
-
-
-
-	// pYearStart = createP(1900);
-	// pYearStart.parent("vizsort");
-	// pYearEnd = createP(2020);
-	// pYearEnd.parent("vizsort");
-
+	//slider.parent("vizsort");
 }
-
-// function setLeftValue() {
-// 	var _this = inputLeft,
-// 		min = parseInt(_this.min),
-// 		max = parseInt(_this.max);
-
-// 	_this.value = Math.min(parseInt(_this.value), parseInt(inputRight.value) - 1);
-
-// 	var percent = ((_this.value - min) / (max - min)) * 100;
-
-// 	thumbLeft.style.left = percent + "%";
-// 	range.style.left = percent + "%";
-// }
-
-// function setRightValue() {
-// 	var _this = inputRight,
-// 		min = parseInt(_this.min),
-// 		max = parseInt(_this.max);
-
-// 	_this.value = Math.max(parseInt(_this.value), parseInt(inputLeft.value) + 1);
-
-// 	var percent = ((_this.value - min) / (max - min)) * 100;
-
-// 	thumbRight.style.right = (100 - percent) + "%";
-// 	range.style.right = (100 - percent) + "%";
-// }
-
-// inputLeft.addEventListener("input", setLeftValue);
-// inputRight.addEventListener("input", setRightValue);
-
-// inputLeft.addEventListener("mouseover", function() {
-// 	thumbLeft.classList.add("hover");
-// });
-// inputLeft.addEventListener("mouseout", function() {
-// 	thumbLeft.classList.remove("hover");
-// });
-// inputLeft.addEventListener("mousedown", function() {
-// 	thumbLeft.classList.add("active");
-// });
-// inputLeft.addEventListener("mouseup", function() {
-// 	thumbLeft.classList.remove("active");
-// });
-
-// inputRight.addEventListener("mouseover", function() {
-// 	thumbRight.classList.add("hover");
-// });
-// inputRight.addEventListener("mouseout", function() {
-// 	thumbRight.classList.remove("hover");
-// });
-// inputRight.addEventListener("mousedown", function() {
-// 	thumbRight.classList.add("active");
-// });
-// inputRight.addEventListener("mouseup", function() {
-// 	thumbRight.classList.remove("active");
-// });
 
 
 function initializeCheckboxCon() {
-	let p = createP("<br><br><br>By Location:");
+	let p = createP("<br>By Location:");
 	p.parent("vizsort");
 	continentStrs.forEach((con) => checkboxsCon.push(createCheckbox(con, true)));
 	checkboxsCon.forEach(function (checkbox) {
@@ -301,7 +245,7 @@ function initializeCheckboxCon() {
 }
 
 function initializeCheckboxType() {
-	let p = createP("<br><br><br>By Type:");
+	let p = createP("By Type:");
 	p.parent("vizsort");
 	typeStrs.forEach((type) => checkboxsType.push(createCheckbox(type, true)));
 	checkboxsType.forEach(function (checkbox) {
@@ -400,11 +344,17 @@ function mousePressed() {
 				nodes[n].isExpand = false;
 				for (let q = 0; q < popUps.length; q++) {
 					if (nodes[n].popUp == popUps[q].id) {
-						popUps[q].updatePopup();
+						popUps[q].hidePopup();
 					}
 				}
 			}
 		}
+	}
+}
+
+function checkPopupHidden(){
+	for(let i = 0; i < popUps.length; i++){
+		popUps[i].updatePopup();
 	}
 }
 
@@ -432,13 +382,7 @@ function updateNodes() {
 	nodes.forEach((node) => node.Move());
 
 	//boundary
-	nodes.forEach((node) =>
-		node.checkEdges(50, 50, canvasXW - 50, canvasYH - 50)
-	);
-	// 	nodes.forEach(node => node.checkEdges(canvasPadding, canvasPadding, windowWidth, windowHeight));
-
-	//boundary
-	nodes.forEach(node => node.checkEdges(50, 50, canvasXW - 50, canvasYH - 50));
+	nodes.forEach(node => node.checkEdges(200, 50, canvasXW - 250, canvasYH - 50));
 	// 	nodes.forEach(node => node.checkEdges(canvasPadding, canvasPadding, windowWidth, windowHeight));
 
 	//repel from other nodes
@@ -520,7 +464,7 @@ function initializeAspects() {
 	}
 
 	//unsure what canvaspadding was?
-	let canvasPadding = 200;
+	let canvasPadding = 400*1000/width;
 
 	for (let a = 0; a < aspectStrs.length; a++) {
 		aspects.push(new Aspect(aspectStrs[a], colorIds[a]));
@@ -528,6 +472,7 @@ function initializeAspects() {
 			width / 2 + (points[a].x * (height - canvasPadding)) / 2,
 			height / 2 - (points[a].y * (height - canvasPadding)) / 2
 		);
+		aspects[a].vector = points[a];
 	}
 }
 
@@ -559,12 +504,29 @@ function findAspects(aspectsToFind) {
 	return aspectsFound;
 }
 
-function windowResized(){
+// move Aspects
+function aspectMove(){
+	aspects.forEach(aspect => aspect.move(scrollPos,width,height));
+}
+
+function windowResize(){
 
 	canvasXW=windowWidth;
 	canvasYH=windowHeight;
 	resizeCanvas(canvasXW, canvasYH);
 	canvas.position(0,0);
 
-
 }
+
+function mouseWheel(event) {
+
+	if(mouseX > 200 && mouseX< windowWidth -250){
+		//move the square according to the vertical scroll amount
+		scrollPos += event.delta/100;
+		scrollPos = Math.min(Math.max(scrollPos,-4),4);
+	}
+
+	scrollPos *= 0.9;
+	//uncomment to block page scrolling
+	//return false;
+  }
