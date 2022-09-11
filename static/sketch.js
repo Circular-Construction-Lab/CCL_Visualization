@@ -506,6 +506,7 @@ function findAspects(aspectsToFind) {
 
 // move Aspects
 function aspectMove(){
+	scrollPos *= 0.9;
 	aspects.forEach(aspect => aspect.move(scrollPos));
 }
 
@@ -525,8 +526,6 @@ function mouseWheel(event) {
 		scrollPos += event.delta/100;
 		scrollPos = Math.min(Math.max(scrollPos,-4),4);
 	}
-
-	scrollPos *= 0.9;
 	//uncomment to block page scrolling
 	//return false;
   }
