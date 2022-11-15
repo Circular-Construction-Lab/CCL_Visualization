@@ -341,7 +341,7 @@ function mousePressed() {
 		) {
 			if (!nodes[n].isExpand) {
 				pid++;
-				popUp = new Popup_v2(pid, nodes[n]);
+				popUp = new Popup_v2(pid, nodes[n],n);
 				popUps.push(popUp);
 				nodes[n].isExpand = true;
 			} else {

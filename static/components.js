@@ -335,9 +335,10 @@ class Aspect {
 
 
 class Popup_v2 {
-	constructor(id_, node_) {
+	constructor(id_, node_, nodeId_) {
 		this.id = id_;
 		this.node = node_;
+		this.nodeId = nodeId_;
 
 		//match to node
 		this.node.popUp = this.id;
@@ -346,12 +347,12 @@ class Popup_v2 {
 		this.container = createDiv(' ');
 		this.container.parent('info');
 		this.div = createDiv(' ');
-		this.div.id(this.id);
+		this.div.id(this.nodeId);
 		this.div.parent(this.container);
 		this.div.class('popup');
 
 		//popup html fill content
-		this.pfill = "<span id='close' onclick='this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode); return false;'>x</span><h1>" + this.node.name + "</h1><h3>" + this.node.architect + "</h3><h3>" + this.node.location + ", " + this.node.year + "</h3><img src='" + this.node.imgUrl + "'/><p>" + this.node.descript + "</p>";
+		this.pfill = "<span id='close' onclick='this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);nodes[this.parentNode.id].isExpand=false;  return false;'>x</span><h1>" + this.node.name + "</h1><h3>" + this.node.architect + "</h3><h3>" + this.node.location + ", " + this.node.year + "</h3><img src='" + this.node.imgUrl + "'/><p>" + this.node.descript + "</p>" + "<p>"+ '<a href="'+ this.node.sourceUrl + '"><u>Link to Project</u></a>' + "</p>";
 
 		this.div.html(this.pfill);
 	}
