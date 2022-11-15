@@ -40,6 +40,7 @@ The application is structured in following structure
 #### index.html
 
 ## Team Members:
+Felix Heisel\
 Leanna Humphrey\
 Haotian Ma\
 Gabriella Kim\
